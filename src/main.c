@@ -8,6 +8,9 @@ double atof(const char *s)
   double a = 0.0;
   int e = 0;
   int c;
+    int sign = 1;
+  if (s[0] == '-')
+	sign = -1;
   while ((c = *s++) != '\0' && isdigit(c)) {
     a = a*10.0 + (c - '0');
   }
@@ -19,7 +22,6 @@ double atof(const char *s)
   }
   if (c == 'e' || c == 'E') 
   {
-    int sign = 1;
     int i = 0;
     c = *s++;
     if (c == '+')
@@ -126,45 +128,49 @@ void	assign_scene(t_scene *scene, char **line)
 		// }
 		if (line[i][0] == 'C')
 		{
-			// while (!ft_isspace(line[i][j]))
-			// 	j++;
-			// while (ft_isspace(line[i][j]))
-			// 	j++;
-			// scene->camera.pos.x = atof(&line[i][j]);
+			j = 2;
+			while (ft_isspace(line[i][j]))
+				j++;
+				
+			printf("%s\n", &line[i][j]);
+			scene->camera.pos.x = atof(&line[i][j]);
+			scene->camera.pos.x = atof("-50");
+			while (line[i][j++] != ',')
+				;
+			printf("%s\n", &line[i][j]);
+			scene->camera.pos.y = atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			printf("%s\n", &line[i][j]);
+			scene->camera.pos.z = atof(&line[i][j]);
 
-			t_camera *camera;
-			camera = malloc(sizeof(t_camera));
-			camera->pos_x = 50.0;//atof("50.15");
-			scene->camera = camera;
-			ft_printf("cam pos x = %s\n", scene->camera->pos_x);
+
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+			
+			printf("%s\n", &line[i][j]);
+			scene->camera.rot.x = atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			printf("%s\n", &line[i][j]);
+			scene->camera.rot.y = atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			printf("%s\n", &line[i][j]);
+			scene->camera.rot.z = atof(&line[i][j]);
 
 
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
 
-
-			// printf("%s\n", &line[i][j]);
-			// while (line[i][j++] != ',')
-			// 	;
-			// scene->camera.pos.y = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
-			// while (line[i][j++] != ',')
-			// 	;
-			// scene->camera.pos.z = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
-			// j += 4;
-			// scene->camera.rot.x = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
-			// while (line[i][j++] != ',')
-			// 	;
-			// scene->camera.rot.y = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
-			// while (line[i][j++] != ',')
-			// 	;
-			// scene->camera.rot.z = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
-			// while (!ft_isspace(line[i][j]))
-			// 	j++;
-			// scene->camera.fov = atof(&line[i][j]);
-			// printf("%s\n", &line[i][j]);
+			
+			printf("%s\n", &line[i][j]);
+			scene->camera.fov = atof(&line[i][j]);
 		}
 		// if (line[i][0] == 'L')
 		// if (line[i][0] == 's')
@@ -174,16 +180,16 @@ void	assign_scene(t_scene *scene, char **line)
 	ft_printf("...done\n");
 }
 
-// void	printf_cam(t_scene *s)
-// {
-// 	ft_printf("pcam pos x = %s\n", s->camera->pos.x);
-// 	// ft_printf("cam pos y = %s\n", s->camera.pos.y);
-// 	// ft_printf("cam pos z = %s\n", s->camera.pos.z);
-// 	// ft_printf("cam rot x = %s\n", s->camera.pos.x);
-// 	// ft_printf("cam rot y = %s\n", s->camera.pos.y);
-// 	// ft_printf("cam rot z = %s\n", s->camera.pos.z);
-// 	// ft_printf("cam fov = %s\n", s->camera.fov);
-// }
+void	printf_cam(t_scene *s)
+{
+	printf("cam pos x = %f\n", s->camera.pos.x);
+	printf("cam pos y = %f\n", s->camera.pos.y);
+	printf("cam pos z = %f\n", s->camera.pos.z);
+	printf("cam rot x = %f\n", s->camera.rot.x);
+	printf("cam rot y = %f\n", s->camera.rot.y);
+	printf("cam rot z = %f\n", s->camera.rot.z);
+	printf("cam fov = %f\n", s->camera.fov);
+}
 
 
 int	main(void)
@@ -199,7 +205,7 @@ int	main(void)
 
 	scene->obj = malloc(sizeof(t_obj) * n_obs + 1);
 	assign_scene(scene, line);
-	// printf_cam(scene);
+	printf_cam(scene);
 	
 	ft_printf("done.exe\n");
 }

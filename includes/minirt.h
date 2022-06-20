@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/06/20 17:36:37 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/20 17:44:34 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,8 @@ typedef	struct s_ambient_light
 
 typedef	struct s_camera
 {
-	double		pos_x;
-	double		pos_y;
-	double		pos_z;
-
-	double		rot_x;
-	double		rot_y;
-	double		rot_z;
+	t_vector3	pos;
+	t_vector3	rot;
 	double		fov;
 }	t_camera;
 
@@ -109,7 +104,7 @@ typedef union
 typedef struct s_scene
 {
 	t_ambient_light	light;
-	t_camera		*camera;
+	t_camera		camera;
 	t_obj			*obj;
 
 } t_scene;
