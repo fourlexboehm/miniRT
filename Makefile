@@ -52,6 +52,12 @@ $(MLX_LIB):
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(MLX_LNK) $(FT_LNK) -lm -o $(NAME)
 
+r:
+	clear
+	make
+	clear
+	@./$(NAME)
+
 clean:
 	rm -rf $(OBJDIR)
 	make -C $(FT) clean

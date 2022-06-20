@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboehm <aboehm@42adel.org>                 +#+  +:+       +#+        */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/28 20:35:40 by aboehm            #+#    #+#             */
-/*   Updated: 2022/05/25 14:52:46 by aboehm           ###   ########.fr       */
+/*   Updated: 2022/06/20 16:23:55 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 # include <string.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
 
 typedef struct s_list
 {
@@ -86,5 +92,8 @@ char	*ft_strndup(const char *s1, size_t n);
 void	ft_new_node(t_list **list, int content);
 void	ft_freev(void **ptr, int len, bool free_seg);
 void	free2d_array(void **arry);
+char	*get_next_line(int fd);
+char	**ft_split_on_whitespace(char const *str);
+
 
 #endif
