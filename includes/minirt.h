@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/06/20 17:44:34 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/20 17:36:37 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 # define MINIRT_H
 
 # include "../libft/libft.h"
+# include "../miniLibX/mlx.h"
 # include <stdint.h>
 # include <pthread.h>
 
+# define KEY_ESC 53
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define ZOOM 1.1f
-# define THREADS 8
+# define MLX_TITLE "MiniRT"
 
 typedef struct s_rgba
 {
@@ -38,12 +39,12 @@ typedef struct s_image
 	int			endian;
 }					t_image;
 
-typedef struct s_vector3 
+typedef struct s_vector3
 {
 	double	x;
 	double	y;
 	double	z;
-} t_vector3;
+}	t_vector3;
 
 // --------------------------objs------------------
 
@@ -107,11 +108,14 @@ typedef struct s_scene
 	t_camera		camera;
 	t_obj			*obj;
 
-} t_scene;
+}	t_scene;
 
 typedef struct s_all
 {
+	t_scene	scene;
+}	t_all;
 
-} t_all;
+void	render_image_on_mlx(int	**matrix_colors);
+double	ft_atof(const char *str);
 
 #endif
