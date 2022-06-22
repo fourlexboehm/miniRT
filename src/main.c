@@ -26,7 +26,7 @@ char	**get_file(char *path)
 	return (line);
 }
 
-int	get_n_obs(char **line)
+void	get_n_obs(char **line, t_scene *scene)
 {
 	int	i;
 	int	num;
@@ -34,269 +34,418 @@ int	get_n_obs(char **line)
 	num = 0;
 	i = -1;
 	ft_printf("getting num of objs");
+	scene->n_spheres = 0;
+	scene->n_planes = 0;
+	scene->n_cylinders = 0;
+	scene->n_lights = 0;
 	while (line[++i])
 	{
 		if (line[i][0] == 's')
-			num++;
+			scene->n_spheres++;
 		if (line[i][0] == 'p')
-			num++;
+			scene->n_planes++;
 		if (line[i][0] == 'c')
-			num++;
+			scene->n_cylinders++;
+		if (line[i][0] == 'L')
+			scene->n_lights++;
 	}
-	ft_printf("...%d\n", num);
-	return (num);
+	ft_printf("...done\n");
+	ft_printf("	n_spheres = %d\n", scene->n_spheres);
+	ft_printf("	n_planes = %d\n", scene->n_planes);
+	ft_printf("	n_cylinders = %d\n", scene->n_cylinders);
+	ft_printf("	n_lights = %d\n", scene->n_lights);
+}
+
+void	assign_ambient_light(t_scene *scene, char *line)
+{
+	int			j;
+
+	j = 1;
+	ft_printf("	assign_ambient_light");
+	while (ft_isspace(line[j]))
+		j++;
+	scene->ambient_light.ambient= ft_atof(&line[j]);
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	
+	scene->ambient_light.color.r = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->ambient_light.color.g = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->ambient_light.color.b = ft_atoi(&line[j]);
+	ft_printf("...done\n");
+}
+
+void	assign_camera(t_scene *scene, char *line)
+{
+	int			j;
+
+	j = 1;
+	ft_printf("	assign_camera");
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->camera.pos.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->camera.pos.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->camera.pos.z = ft_atof(&line[j]);
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+	
+	
+	scene->camera.rot.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->camera.rot.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->camera.rot.z = ft_atof(&line[j]);
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->camera.fov = ft_atof(&line[j]);
+	ft_printf("...done\n");
+}
+
+void	assign_sphere(t_scene *scene, char *line)
+{
+	int			j;
+	static int	i = 0;
+
+	j = 2;
+	ft_printf("	assign_sphere");
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->spheres[i].pos.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->spheres[i].pos.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->spheres[i].pos.z = ft_atof(&line[j]);
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+
+	scene->spheres[i].diameter = ft_atof(&line[j]);
+
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->spheres[i].color.r = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->spheres[i].color.g = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->spheres[i].color.b = ft_atoi(&line[j]);
+	i++;
+	ft_printf("...done\n");
+}
+
+void	assign_cylinder(t_scene *scene, char *line)
+{
+	int			j;
+	static int	i = 0;
+
+	j = 2;
+	ft_printf("	assign_cylinder");
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->cylinders[i].pos.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].pos.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].pos.z = ft_atof(&line[j]);
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	
+	scene->cylinders[i].rot.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].rot.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].rot.z = ft_atof(&line[j]);
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+
+	scene->cylinders[i].diameter = ft_atof(&line[j]);
+
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	
+	scene->cylinders[i].height = ft_atof(&line[j]);
+
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->cylinders[i].color.r = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].color.g = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->cylinders[i].color.b = ft_atoi(&line[j]);
+	i++;
+	ft_printf("...done\n");
+}
+
+void	assign_plane(t_scene *scene, char *line)
+{
+	int			j;
+	static int	i = 0;
+
+	j = 2;
+	ft_printf("	assign_plane");
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->planes[i].pos.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].pos.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].pos.z = ft_atof(&line[j]);
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	
+	scene->planes[i].rot.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].rot.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].rot.z = ft_atof(&line[j]);
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+
+	scene->planes[i].color.r = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].color.g = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->planes[i].color.b = ft_atoi(&line[j]);
+	i++;
+	ft_printf("...done\n");
+}
+
+void	assign_light(t_scene *scene, char *line)
+{
+	int			j;
+	static int	i = 0;
+
+	j = 1;
+	ft_printf("	assign_light");
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->lights[i].pos.x = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->lights[i].pos.y = ft_atof(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->lights[i].pos.z = ft_atof(&line[j]);
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+
+	scene->lights[i].brightness = ft_atof(&line[j]);
+
+
+	while (!ft_isspace(line[j]))
+		j++;
+	while (ft_isspace(line[j]))
+		j++;
+
+	scene->lights[i].color.r = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->lights[i].color.g = ft_atoi(&line[j]);
+	while (line[j++] != ',')
+		;
+	scene->lights[i].color.b = ft_atoi(&line[j]);
+	i++;
+	ft_printf("...done\n");
+}
+
+void	malloc_objs(t_scene *scene)
+{
+	ft_printf("allocatting memory for objs");
+	scene->spheres = ft_calloc(sizeof(t_sp), scene->n_spheres + 1);
+	scene->cylinders = ft_calloc(sizeof(t_cy), scene->n_cylinders + 1);
+	scene->planes = ft_calloc(sizeof(t_pl), scene->n_planes + 1);
+	scene->lights = ft_calloc(sizeof(t_L), scene->n_lights + 1);
+	ft_printf("...done\n");
 }
 
 void	assign_scene(t_scene *scene, char **line)
 {
-	int	i;
-	int	j;
-	//char **current_line;
-	//char **vals;
+	int		i;
 
+	get_n_obs(line, scene);
+	malloc_objs(scene);
 	i = -1;
 	ft_printf("assigning objs\n");
 	while (line[++i])
 	{
-//		j = 0;
-		// if (line[i][0] == 'A')
-		// {
-		// 	while (!ft_isspace(line[i][j]))
-		// 		j++;
-		// 	current_line = ft_split_on_whitespace(line[i] + 2);
-		// 	while(*current_line + 2)
-		// 	{
-		// 		scene->light->ambient =  ft_atof(*current_line);
-		// 		vals = ft_split(*current_line++, ',');
-		// 		if(*vals)
-		// 		{
-		// 			scene->light->color.r =  ft_atof(*vals);
-		// 			vals++;
-		// 			scene->light->color.r =  ft_atof(*vals);
-		// 			vals++;
-		// 			scene->light->color.r =  ft_atof(*vals);
-		// 			vals++;
-		// 		}
-		// 	}
-		// }
+		if (line[i][0] == 'A')
+			assign_ambient_light(scene, line[i]);
 		if (line[i][0] == 'C')
-		{
-			j = 2;
-			while (ft_isspace(line[i][j]))
-				j++;
-			scene->camera.pos.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->camera.pos.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->camera.pos.z = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-			scene->camera.rot.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->camera.rot.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->camera.rot.z = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-			scene->camera.fov = ft_atof(&line[i][j]);
-		}
-		else if (line[i][0] == 'L')
-		{
-			j = 1;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-			scene->obj->light.pos.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->light.pos.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->light.pos.z = ft_atof(&line[i][j]);
-
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-
-			scene->obj->light.brightness = ft_atof(&line[i][j]);
-
-
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-			scene->obj->light.color.r = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->light.color.g = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->light.color.b = ft_atoi(&line[i][j]);
-		}
+			assign_camera(scene, line[i]);
+		if (line[i][0] == 'c')
+			assign_cylinder(scene, line[i]);
 		else if (line[i][0] == 's')
-		{
-			j = 2;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-			scene->obj->sphere.pos.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->sphere.pos.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->sphere.pos.z = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-
-			scene->obj->sphere.diameter = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-			scene->obj->sphere.color.r = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->sphere.color.g = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-			scene->obj->sphere.color.b = ft_atoi(&line[i][j]);
-		}
+			assign_sphere(scene, line[i]);
 		else if (line[i][0] == 'p')
-		{
-			j = 2;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.pos.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-				printf("%s\n", &line[i][j]);
-			scene->obj->plane.pos.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.pos.z = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.rot.x = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.rot.y = ft_atof(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.rot.z = ft_atof(&line[i][j]);
-			while (!ft_isspace(line[i][j]))
-				j++;
-			while (ft_isspace(line[i][j]))
-				j++;
-
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.color.r = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.color.g = ft_atoi(&line[i][j]);
-			while (line[i][j++] != ',')
-				;
-		printf("%s\n", &line[i][j]);
-			scene->obj->plane.color.b = ft_atoi(&line[i][j]);
-		printf(" plane pos z = %f\n", scene->obj->plane.pos.z);
-		}
-		// if (line[i][0] == 'c')
+			assign_plane(scene, line[i]);
+		else if (line[i][0] == 'L')
+			assign_light(scene, line[i]);
 	}
-	printf(" plane pos z = %f\n", scene->obj->plane.pos.z);
-	ft_printf("...done\n");
+	ft_printf("done\n");
 }
 
-void	printf_cam(t_scene *s)
+
+void	printf_ambient_light(t_ambient_light *ambient_light)
 {
-	printf("cam pos x = %f\n", s->camera.pos.x);
-	printf("cam pos y = %f\n", s->camera.pos.y);
-	printf("cam pos z = %f\n", s->camera.pos.z);
-	printf("cam rot x = %f\n", s->camera.rot.x);
-	printf("cam rot y = %f\n", s->camera.rot.y);
-	printf("cam rot z = %f\n", s->camera.rot.z);
-	printf("cam fov = %f\n", s->camera.fov);
+	printf("ambient_light value = %f\n", ambient_light->ambient);
+	printf("ambient_light R = %u\n", ambient_light->color.r);
+	printf("ambient_light G = %u\n", ambient_light->color.g);
+	printf("ambient_light B = %u\n", ambient_light->color.b);
 }
 
-void	printf_light(t_scene *s)
+void	printf_cam(t_camera *camera)
 {
-	printf("light pos x = %f\n", s->obj->light.pos.x);
-	printf("light pos y = %f\n", s->obj->light.pos.y);
-	printf("light pos z = %f\n", s->obj->light.pos.z);
-	printf("light brightness = %f\n", s->obj->light.brightness);
-	printf("light R = %u\n", s->obj->light.color.r);
-	printf("light G = %u\n", s->obj->light.color.g);
-	printf("light B = %u\n", s->obj->light.color.b);
+	printf("cam pos x = %f\n", camera->pos.x);
+	printf("cam pos y = %f\n", camera->pos.y);
+	printf("cam pos z = %f\n", camera->pos.z);
+	printf("cam rot x = %f\n", camera->rot.x);
+	printf("cam rot y = %f\n", camera->rot.y);
+	printf("cam rot z = %f\n", camera->rot.z);
+	printf("cam fov = %f\n", camera->fov);
 }
 
-void	printf_sphere(t_scene *s)
+void	printf_sphere(t_sp *sphere)
 {
-	printf("sphere pos x = %f\n", s->obj->sphere.pos.x);
-	printf("sphere pos y = %f\n", s->obj->sphere.pos.y);
-	printf("sphere pos z = %f\n", s->obj->sphere.pos.z);
-	printf("sphere diameter = %f\n", s->obj->sphere.diameter);
-	printf("sphere R = %u\n", s->obj->sphere.color.r);
-	printf("sphere G = %u\n", s->obj->sphere.color.g);
-	printf("sphere B = %u\n", s->obj->sphere.color.b);
+	printf("sphere pos x = %f\n", sphere->pos.x);
+	printf("sphere pos y = %f\n", sphere->pos.y);
+	printf("sphere pos z = %f\n", sphere->pos.z);
+	printf("sphere diameter = %f\n", sphere->diameter);
+	printf("sphere R = %u\n", sphere->color.r);
+	printf("sphere G = %u\n", sphere->color.g);
+	printf("sphere B = %u\n", sphere->color.b);
 }
 
-void	printf_plane(t_scene *s)
+void	printf_cylinder(t_cy *cylinder)
 {
-	printf("plane pos x = %f\n", s->obj->plane.pos.x);
-	printf("plane pos y = %f\n", s->obj->plane.pos.y);
-	printf("plane pos z = %f\n", s->obj->plane.pos.z);
-	printf("plane rot x = %f\n", s->obj->plane.rot.x);
-	printf("plane rot y = %f\n", s->obj->plane.rot.y);
-	printf("plane rot z = %f\n", s->obj->plane.rot.z);
-	printf("plane R = %u\n", s->obj->plane.color.r);
-	printf("plane G = %u\n", s->obj->plane.color.g);
-	printf("plane B = %u\n", s->obj->plane.color.b);
+	printf("cylinder pos x = %f\n", cylinder->pos.x);
+	printf("cylinder pos y = %f\n", cylinder->pos.y);
+	printf("cylinder pos z = %f\n", cylinder->pos.z);
+	printf("cylinder rot x = %f\n", cylinder->rot.x);
+	printf("cylinder rot y = %f\n", cylinder->rot.y);
+	printf("cylinder rot z = %f\n", cylinder->rot.z);
+	printf("cylinder R = %u\n", cylinder->color.r);
+	printf("cylinder G = %u\n", cylinder->color.g);
+	printf("cylinder B = %u\n", cylinder->color.b);
 }
+
+void	printf_plane(t_pl *plane)
+{
+	printf("plane pos x = %f\n", plane->pos.x);
+	printf("plane pos y = %f\n", plane->pos.y);
+	printf("plane pos z = %f\n", plane->pos.z);
+	printf("plane rot x = %f\n", plane->rot.x);
+	printf("plane rot y = %f\n", plane->rot.y);
+	printf("plane rot z = %f\n", plane->rot.z);
+	printf("plane R = %u\n", plane->color.r);
+	printf("plane G = %u\n", plane->color.g);
+	printf("plane B = %u\n", plane->color.b);
+}
+
+void	printf_light(t_L *light)
+{
+	printf("light pos x = %f\n", light->pos.x);
+	printf("light pos y = %f\n", light->pos.y);
+	printf("light pos z = %f\n", light->pos.z);
+	printf("light brightness = %f\n", light->brightness);
+	printf("light R = %u\n", light->color.r);
+	printf("light G = %u\n", light->color.g);
+	printf("light B = %u\n", light->color.b);
+}
+
 
 int	main(void)
 {
 	char	**line;
-	int		n_obs;
 	t_scene	scene;
-
+	int i;
+	
+	i = -1;
 	line = get_file("scenes/1.rt");
-	n_obs = get_n_obs(line);
-	scene.obj = malloc(sizeof(t_obj) * n_obs + 1);
 	assign_scene(&scene, line);
 	//ray_tracer();
 	//render_image_on_mlx(colour_image);
-	// printf_cam(&scene);
-	// printf("\n");
-	// printf_light(&scene);
-	// printf("\n");
-	// printf_sphere(&scene);
-	// printf("\n");
-	printf_plane(&scene);
 	printf("\n");
-	free(scene.obj);
+	printf_ambient_light(&scene.ambient_light);
+	printf("\n");
+	printf_cam(&scene.camera);
+	printf("\n");
+	printf_sphere(&scene.spheres[0]);
+	printf("\n");
+	printf_cylinder(&scene.cylinders[0]);
+	printf("\n");
+	printf_plane(&scene.planes[0]);
+	printf("\n");
+	printf_light(&scene.lights[0]);
+	printf("\n");
 	ft_printf("done.exe\n");
 }
