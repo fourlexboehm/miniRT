@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/06/20 17:36:37 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/22 13:06:24 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,13 @@ typedef union
 	t_sp	sphere;
 	t_cy	cylinder;
 	t_pl	plane;
+	t_L		light;
 } t_obj;
 
 //contains an array of objs, a camera and lights
 typedef struct s_scene
 {
-	t_ambient_light	light;
+	t_ambient_light	ambient_light;
 	t_camera		camera;
 	t_obj			*obj;
 

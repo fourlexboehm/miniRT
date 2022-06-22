@@ -84,39 +84,99 @@ void	assign_scene(t_scene *scene, char **line)
 			j = 2;
 			while (ft_isspace(line[i][j]))
 				j++;
-			printf("%s\n", &line[i][j]);
 			scene->camera.pos.x = ft_atof(&line[i][j]);
 			while (line[i][j++] != ',')
 				;
-			printf("%s\n", &line[i][j]);
 			scene->camera.pos.y = ft_atof(&line[i][j]);
 			while (line[i][j++] != ',')
 				;
-			printf("%s\n", &line[i][j]);
 			scene->camera.pos.z = ft_atof(&line[i][j]);
 			while (!ft_isspace(line[i][j]))
 				j++;
 			while (ft_isspace(line[i][j]))
 				j++;
-			printf("%s\n", &line[i][j]);
 			scene->camera.rot.x = ft_atof(&line[i][j]);
 			while (line[i][j++] != ',')
 				;
-			printf("%s\n", &line[i][j]);
 			scene->camera.rot.y = ft_atof(&line[i][j]);
 			while (line[i][j++] != ',')
 				;
-			printf("%s\n", &line[i][j]);
 			scene->camera.rot.z = ft_atof(&line[i][j]);
 			while (!ft_isspace(line[i][j]))
 				j++;
 			while (ft_isspace(line[i][j]))
 				j++;
-			printf("%s\n", &line[i][j]);
 			scene->camera.fov = ft_atof(&line[i][j]);
 		}
-		// if (line[i][0] == 'L')
-		// if (line[i][0] == 's')
+		if (line[i][0] == 'L')
+		{
+			j = 1;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+			scene->obj->light.pos.x = ft_atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->light.pos.y = ft_atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->light.pos.z = ft_atof(&line[i][j]);
+
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+
+			scene->obj->light.brightness = ft_atof(&line[i][j]);
+
+
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+			scene->obj->light.color.r = ft_atoi(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->light.color.g = ft_atoi(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->light.color.b = ft_atoi(&line[i][j]);
+		}
+		if (line[i][0] == 's')
+		{
+			j = 2;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+			scene->obj->sphere.pos.x = ft_atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->sphere.pos.y = ft_atof(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->sphere.pos.z = ft_atof(&line[i][j]);
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+
+			scene->obj->sphere.diameter = ft_atof(&line[i][j]);
+			while (!ft_isspace(line[i][j]))
+				j++;
+			while (ft_isspace(line[i][j]))
+				j++;
+
+			scene->obj->sphere.color.r = ft_atoi(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->sphere.color.g = ft_atoi(&line[i][j]);
+			while (line[i][j++] != ',')
+				;
+			scene->obj->sphere.color.b = ft_atoi(&line[i][j]);
+		}
 		// if (line[i][0] == 'p')
 		// if (line[i][0] == 'c')
 	}
@@ -134,6 +194,28 @@ void	printf_cam(t_scene *s)
 	printf("cam fov = %f\n", s->camera.fov);
 }
 
+void	printf_light(t_scene *s)
+{
+	printf("light pos x = %f\n", s->obj->light.pos.x);
+	printf("light pos y = %f\n", s->obj->light.pos.y);
+	printf("light pos z = %f\n", s->obj->light.pos.z);
+	printf("light brightness = %f\n", s->obj->light.brightness);
+	printf("light R = %u\n", s->obj->light.color.r);
+	printf("light G = %u\n", s->obj->light.color.g);
+	printf("light B = %u\n", s->obj->light.color.b);
+}
+
+void	printf_sphere(t_scene *s)
+{
+	printf("sphere pos x = %f\n", s->obj->sphere.pos.x);
+	printf("sphere pos y = %f\n", s->obj->sphere.pos.y);
+	printf("sphere pos z = %f\n", s->obj->sphere.pos.z);
+	printf("sphere diameter = %f\n", s->obj->sphere.diameter);
+	printf("sphere R = %u\n", s->obj->sphere.color.r);
+	printf("sphere G = %u\n", s->obj->sphere.color.g);
+	printf("sphere B = %u\n", s->obj->sphere.color.b);
+}
+
 int	main(void)
 {
 	char	**line;
@@ -144,8 +226,14 @@ int	main(void)
 	n_obs = get_n_obs(line);
 	scene.obj = malloc(sizeof(t_obj) * n_obs + 1);
 	assign_scene(&scene, line);
-	ray_tracer();
-	render_image_on_mlx(colour_image);
+	//ray_tracer();
+	//render_image_on_mlx(colour_image);
+	printf_cam(&scene);
+	printf("\n");
+	printf_light(&scene);
+	printf("\n");
+	printf_sphere(&scene);
 	free(scene.obj);
+	printf("\n");
 	ft_printf("done.exe\n");
 }

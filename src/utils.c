@@ -7,7 +7,7 @@ static double	get_decimal(const char *str)
 
 	decimal = 0;
 	weight = 1;
-	while (*++str)
+	while (*++str && *str != ',' && !ft_isspace(*str))
 	{
 		decimal *= 10;
 		decimal += *str - '0';
@@ -24,6 +24,8 @@ double	ft_atof(const char *str)
 	double	decimal;
 
 	neg = 1;
+	while (ft_isspace(*str))
+		str++;
 	if (*str == '-')
 	{
 		neg = -1;
@@ -32,7 +34,7 @@ double	ft_atof(const char *str)
 	else if (*str == '+')
 		++str;
 	value = 0;
-	while (*str != '.')
+	while (*str != '.' && *str != ',' && !ft_isspace(*str))
 	{
 		if (!*str)
 			return (neg * value);
@@ -40,6 +42,8 @@ double	ft_atof(const char *str)
 		value += *str - '0';
 		str++;
 	}
+	if (*str != '.')
+		return (value * neg);
 	decimal = get_decimal(str);
 	return ((value + decimal) * neg);
 }
