@@ -20,23 +20,6 @@ static	int	close_window(t_vars *vars)
 	exit (0);
 }
 
-/**
- * * Render a pixel of the image from a color given
- * @param img	image to render
- * @param x		x coordinate
- * @param y		y coordinate
- * @param color	color to draw pixel
-*/
-static void	render_pixel(t_data *img, int x, int y, int color)
-{
-	char	*pixel;
-
-	pixel = (y * img->line_length + x * (img->bits_per_pixel / 8)) + img->addr;
-	*(unsigned int *)pixel = color;
-}
-
-//function to free matrix_colors
-
 static void	render_pixels(t_data	*img, int **matrix_colors)
 {
 	int		x;
@@ -49,7 +32,8 @@ static void	render_pixels(t_data	*img, int **matrix_colors)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			render_pixel(img, x, y, matrix_colors[x][y]);
+			pixel = (y * img->line_length + x * (img->bits_per_pixel / 8)) + img->addr;
+			*(unsigned int *)pixel = matrix_colors[x][y];
 			x++;
 		}
 		y++;
