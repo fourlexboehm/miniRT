@@ -26,6 +26,25 @@ char	**get_file(char *path)
 	return (line);
 }
 
+void set_vector3(t_vector3 *vec, char *line, int *j)
+{
+	vec->x = ft_atof(&line[*j]);
+	while (line[(*j)++] != ',')
+		;
+	vec->y = ft_atof(&line[*j]);
+	while (line[(*j)++] != ',')
+		;
+	vec->z = ft_atof(&line[*j]);
+}
+
+void next_num(char *line, int *j)
+{
+	while (!ft_isspace(line[*j]))
+		(*j)++;
+	while (ft_isspace(line[*j]))
+		(*j)++;
+}
+
 void	get_n_obs(char **line, t_scene *scene)
 {
 	int	i;
