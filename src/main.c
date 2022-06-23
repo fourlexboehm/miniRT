@@ -193,7 +193,6 @@ void	assign_cylinder(t_scene *scene, char *line)
 	while (line[j++] != ',')
 		;
 	scene->cylinders[i].rot.z = ft_atof(&line[j]);
-
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -201,8 +200,6 @@ void	assign_cylinder(t_scene *scene, char *line)
 
 
 	scene->cylinders[i].diameter = ft_atof(&line[j]);
-
-
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -210,8 +207,6 @@ void	assign_cylinder(t_scene *scene, char *line)
 
 	
 	scene->cylinders[i].height = ft_atof(&line[j]);
-
-
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -393,6 +388,8 @@ void	printf_cylinder(t_cy *cylinder)
 	printf("cylinder rot x = %f\n", cylinder->rot.x);
 	printf("cylinder rot y = %f\n", cylinder->rot.y);
 	printf("cylinder rot z = %f\n", cylinder->rot.z);
+	printf("cylinder diameter = %f\n", cylinder->diameter);
+	printf("cylinder height = %f\n", cylinder->height);
 	printf("cylinder R = %u\n", cylinder->color.r);
 	printf("cylinder G = %u\n", cylinder->color.g);
 	printf("cylinder B = %u\n", cylinder->color.b);
