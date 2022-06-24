@@ -1,19 +1,40 @@
 #include "../includes/minirt.h"
-#include <math.h>
 
-void	add_vector3(t_vector3 *v1, t_vector3 *v2)
+/**
+ * @brief      Scales a vector by a scalar.
+ * @param vec
+ * @param scale
+ * @return
+ */
+
+t_vector3	scale_vector3(const t_vector3 vec, const double scale)
 {
-	v1->x += v2->x;
-	v1->y += v2->y;
-	v1->y += v2->z;
+	t_vector3	new_vec;
+
+	new_vec.x = vec.x * scale;
+	new_vec.y = vec.y * scale;
+	new_vec.z = vec.z * scale;
+	return (new_vec);
 }
 
-
-void	subtract_vector3(t_vector3 *v1, t_vector3 *v2)
+t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2)
 {
-	v1->x += v2->x * -1;
-	v1->y += v2->y * -1;
-	v1->y += v2->z * -1;
+	t_vector3	ret;
+
+	ret.x = v1.x + v2.x;
+	ret.y = v1.y + v2.y;
+	ret.z = v1.z + v2.z;
+	return (ret);
+}
+
+t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2)
+{
+	t_vector3	ret;
+
+	ret.x = v1.x - v2.x;
+	ret.y = v1.y - v2.y;
+	ret.z = v1.z - v2.z;
+	return (ret);
 }
 
 void	multi_vector3(t_vector3 *v1, t_vector3 *v2)
@@ -21,13 +42,6 @@ void	multi_vector3(t_vector3 *v1, t_vector3 *v2)
 	v1->x *= v2->x;
 	v1->y *= v2->y;
 	v1->y *= v2->z;
-}
-
-void	scalar_vector3(t_vector3 *v1, double scalar)
-{
-	v1->x *= scalar;
-	v1->y *= scalar;
-	v1->y *= scalar;
 }
 
 double get_distance_vector3(t_vector3 *v1, t_vector3 *v2)

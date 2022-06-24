@@ -99,7 +99,7 @@ char	*get_next_line(int fd)
 	int				n;
 	static char		*stored[4096];
 
-	if (10 < 1 || fd < 0)
+	if (fd < 0)
 		return (NULL);
 	buff = malloc(10 + 1);
 	while (!charfind(&stored[fd][0]))

@@ -32,7 +32,8 @@ static void	render_pixels(t_data	*img, int **matrix_colors)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			pixel = (y * img->line_length + x * (img->bits_per_pixel / 8)) + img->addr;
+			pixel = (y * img->line_length + x * (img->bits_per_pixel / 8))
+				+ img->addr;
 			*(unsigned int *)pixel = matrix_colors[x][y];
 			x++;
 		}

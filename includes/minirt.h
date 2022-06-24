@@ -17,11 +17,13 @@
 # include "../miniLibX/mlx.h"
 # include <stdint.h>
 # include <pthread.h>
+# include <math.h>
 
 # define KEY_ESC 53
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define MLX_TITLE "MiniRT"
+# define DEGREE_TO_RAD(x) (x * M_PI / 180)
 
 typedef struct s_rgba
 {
@@ -45,6 +47,15 @@ typedef struct s_vector3
 	double	y;
 	double	z;
 }	t_vector3;
+
+//coordinates for the corners of the screen
+typedef struct s_corners
+{
+	t_vector3	tl;
+	t_vector3	tr;
+	t_vector3	bl;
+	t_vector3	br;
+}	t_corners;
 
 // --------------------------objs------------------
 
@@ -114,20 +125,27 @@ typedef struct s_all
 	t_scene	scene;
 }	t_all;
 
-void	render_image_on_mlx(int	**matrix_colors);
-double	ft_atof(const char *str);
+//viewport
+t_vector3	**calculate_viewport_vectors(t_camera cam);
+
+t_vector3	**set_cam_vectors(t_corners corn);
+
+//mlx
+void		render_image_on_mlx(int	**matrix_colors);
+//utils
+double		ft_atof(const char *str);
 
 //	------------------------------vector------------------------
 
-void	add_vector3(t_vector3 *v1, t_vector3 *v2);
-void	subtract_vector3(t_vector3 *v1, t_vector3 *v2);
-void	multi_vector3(t_vector3 *v1, t_vector3 *v2);
-void	scalar_vector3(t_vector3 *v1, double scalar);
+t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
+t_vector3 	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
+void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
+t_vector3	scale_vector3(const t_vector3 vec, const double scale);
 
-double	get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
-double	get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
+double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
 
-double	get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
-double	get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 
 #endif

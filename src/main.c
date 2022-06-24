@@ -51,6 +51,7 @@ void	get_n_obs(char **line, t_scene *scene)
 	int	num;
 
 	num = 0;
+	(void)num;
 	i = -1;
 	ft_printf("getting num of objs");
 	scene->n_spheres = 0;
@@ -83,13 +84,13 @@ void	assign_ambient_light(t_scene *scene, char *line)
 	ft_printf("	assign_ambient_light");
 	while (ft_isspace(line[j]))
 		j++;
-	scene->ambient_light.ambient= ft_atof(&line[j]);
+	scene->ambient_light.ambient = ft_atof(&line[j]);
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
 
-	
+
 	scene->ambient_light.color.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
@@ -469,14 +470,14 @@ int	main(void)
 {
 	char	**line;
 	t_scene	scene;
-	
+
 	line = get_file("scenes/1.rt");
 	assign_scene(&scene, line);
+	calculate_viewport_vectors(scene.camera);
 	//ray_tracer();
 	//render_image_on_mlx(colour_image);
 	printf_scene(&scene);
 	ft_printf("done.exe\n");
-
 
 
 
@@ -493,8 +494,8 @@ int	main(void)
 	v2.z = 91;
 
 
-	printf("rad is = %lf\n", get_coord_rad_vector3(&v1, &v2));
-	printf("deg is = %lf\n", get_coord_deg_vector3(&v1, &v2));
+//	printf("rad is = %lf\n", get_coord_rad_vector3(&v1, &v2));
+//	printf("deg is = %lf\n", get_coord_deg_vector3(&v1, &v2));
 
 
 
