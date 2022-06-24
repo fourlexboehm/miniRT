@@ -375,6 +375,7 @@ void	printf_ambient_light(t_ambient_light *ambient_light)
 	printf("ambient_light R = %u\n", ambient_light->color.r);
 	printf("ambient_light G = %u\n", ambient_light->color.g);
 	printf("ambient_light B = %u\n", ambient_light->color.b);
+	printf("\n");
 }
 
 void	printf_cam(t_camera *camera)
@@ -386,6 +387,7 @@ void	printf_cam(t_camera *camera)
 	printf("cam rot y = %f\n", camera->rot.y);
 	printf("cam rot z = %f\n", camera->rot.z);
 	printf("cam fov = %f\n", camera->fov);
+	printf("\n");
 }
 
 void	printf_sphere(t_sp *sphere)
@@ -397,6 +399,7 @@ void	printf_sphere(t_sp *sphere)
 	printf("sphere R = %u\n", sphere->color.r);
 	printf("sphere G = %u\n", sphere->color.g);
 	printf("sphere B = %u\n", sphere->color.b);
+	printf("\n");
 }
 
 void	printf_cylinder(t_cy *cylinder)
@@ -412,6 +415,7 @@ void	printf_cylinder(t_cy *cylinder)
 	printf("cylinder R = %u\n", cylinder->color.r);
 	printf("cylinder G = %u\n", cylinder->color.g);
 	printf("cylinder B = %u\n", cylinder->color.b);
+	printf("\n");
 }
 
 void	printf_plane(t_pl *plane)
@@ -425,6 +429,7 @@ void	printf_plane(t_pl *plane)
 	printf("plane R = %u\n", plane->color.r);
 	printf("plane G = %u\n", plane->color.g);
 	printf("plane B = %u\n", plane->color.b);
+	printf("\n");
 }
 
 void	printf_light(t_L *light)
@@ -436,32 +441,63 @@ void	printf_light(t_L *light)
 	printf("light R = %u\n", light->color.r);
 	printf("light G = %u\n", light->color.g);
 	printf("light B = %u\n", light->color.b);
+	printf("\n");
 }
 
+void	printf_scene(t_scene *scene)
+{
+	int	i;
+
+	printf_ambient_light(&scene->ambient_light);
+	printf_cam(&scene->camera);
+	i = -1;
+	while (++i < scene->n_spheres)
+		printf_sphere(&scene->spheres[i]);
+	i = -1;
+	while (++i < scene->n_cylinders)
+		printf_cylinder(&scene->cylinders[i]);
+	i = -1;
+	while (++i < scene->n_planes)
+		printf_plane(&scene->planes[i]);
+	i = -1;
+	while (++i < scene->n_lights)
+		printf_light(&scene->lights[i]);
+	i = -1;
+}
 
 int	main(void)
 {
 	char	**line;
 	t_scene	scene;
-	int i;
 	
-	i = -1;
 	line = get_file("scenes/1.rt");
 	assign_scene(&scene, line);
 	//ray_tracer();
 	//render_image_on_mlx(colour_image);
-	printf("\n");
-	printf_ambient_light(&scene.ambient_light);
-	printf("\n");
-	printf_cam(&scene.camera);
-	printf("\n");
-	printf_sphere(&scene.spheres[0]);
-	printf("\n");
-	printf_cylinder(&scene.cylinders[0]);
-	printf("\n");
-	printf_plane(&scene.planes[0]);
-	printf("\n");
-	printf_light(&scene.lights[0]);
-	printf("\n");
+	printf_scene(&scene);
 	ft_printf("done.exe\n");
+
+
+
+
+
+
+	t_vector3 v1;
+	v1.x = 19;
+	v1.y = 420;
+	v1.z = 5;
+
+	t_vector3 v2;
+	v2.x = 16;
+	v2.y = 52;
+	v2.z = 91;
+
+
+	printf("rad is = %lf\n", get_coord_rad_vector3(&v1, &v2));
+	printf("deg is = %lf\n", get_coord_deg_vector3(&v1, &v2));
+
+
+
+
+
 }

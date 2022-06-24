@@ -7,7 +7,7 @@ INCDIR	= ./includes
 OBJDIR	= ./obj
 
 # src / obj files
-SRC		= main.c  utils.c render.c\
+SRC		= main.c  utils.c render.c vector_fun.c\
 
 OBJ		= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 

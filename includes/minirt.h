@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/06/22 16:12:43 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/06/24 15:04:59 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,18 @@ typedef struct s_all
 
 void	render_image_on_mlx(int	**matrix_colors);
 double	ft_atof(const char *str);
+
+//	------------------------------vector------------------------
+
+void	add_vector3(t_vector3 *v1, t_vector3 *v2);
+void	subtract_vector3(t_vector3 *v1, t_vector3 *v2);
+void	multi_vector3(t_vector3 *v1, t_vector3 *v2);
+void	scalar_vector3(t_vector3 *v1, double scalar);
+
+double	get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
+double	get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+
+double	get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
+double	get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 
 #endif
