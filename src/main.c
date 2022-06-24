@@ -494,8 +494,8 @@ int	main(void)
 	v2.z = 91;
 
 
-//	printf("rad is = %lf\n", get_coord_rad_vector3(&v1, &v2));
-//	printf("deg is = %lf\n", get_coord_deg_vector3(&v1, &v2));
+	printf("rad is = %lf\n", get_coord_rad_vector3(&v1, &v2));
+	printf("deg is = %lf\n", get_coord_deg_vector3(&v1, &v2));
 
 
 
