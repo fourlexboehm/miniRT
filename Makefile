@@ -58,6 +58,11 @@ r:
 	clear
 	@./$(NAME)
 
+sdl:
+	clear
+	gcc src/SDL_to_mlx.c MLX_LNK -o SDL_to_mlx.out
+	./SDL_to_mlx.out
+
 clean:
 	rm -rf $(OBJDIR)
 	make -C $(FT) clean
