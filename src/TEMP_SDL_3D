@@ -1,7 +1,3 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2022)
-and may not be redistributed without written permission.*/
-
-//Using SDL and standard IO
 #include <SDL.h>
 #include <stdio.h>
 
@@ -36,6 +32,15 @@ t_vector3	scale_vector3(const t_vector3 vec, const double scale)
 	new_vec.z = vec.z * scale;
 	return (new_vec);
 }
+t_vector3	div_vector3(const t_vector3 vec, const double scale)
+{
+	t_vector3	new_vec;
+
+	new_vec.x = vec.x / scale;
+	new_vec.y = vec.y / scale;
+	new_vec.z = vec.z / scale;
+	return (new_vec);
+}
 
 void printf_vector3(char c, t_vector3* v1)
 {
@@ -60,20 +65,17 @@ typedef struct s_pl
 	double	ang;
 	int		size;
 } t_pl;
-
 typedef	struct s_sp
 {
 	t_vector3	pos;
 	double		diameter;
 }	t_sp;
-
 typedef struct s_ray
 {
 	t_vector3	O;
 	t_vector3	D;
 	int			t;
 } t_ray;
-
 typedef struct s_cam
 {
 	t_vector3	O;
@@ -134,13 +136,6 @@ t_vector3 new_vector3(double x, double y, double z)
 	return (rtn);
 }
 
-t_vector3 reflect(t_vector3 v, t_vector3 n) 
-{
-	// return subtract_vector3(scale_vector3(v, -2), n);
-	// return (subtract_vector3(v, scale_vector3(n, 2 * dot(&v, &n))));
-	return subtract_vector3(scale_vector3(n, dot(&v, &n) * 2), v);
-}
-
 float collide_sphere_3D(t_ray* r, t_sp* s)
 {
 	t_vector3 oc = subtract_vector3(r->O, s->pos);
@@ -152,6 +147,29 @@ float collide_sphere_3D(t_ray* r, t_sp* s)
 		return (-1);
 	else
 		return ((-b - sqrt(discriminant)) / a);
+}
+
+float collide_sphere_3D_reflect(t_ray* r, t_sp* s)
+{
+	t_vector3 oc = subtract_vector3(r->O, s->pos);
+	float a = length_squared(r->D);
+	float b = dot(&oc, &r->D);
+	float c = length_squared(oc) - s->diameter * s->diameter;
+	float discriminant = (b * b) - (a * c);
+
+	double sqrtd = sqrt(discriminant);
+	double root;
+
+	root = (-b - sqrtd) / a;
+	return (root);
+}
+
+t_vector3 reflect(t_vector3 v, t_vector3 n)
+{
+	// return subtract_vector3(scale_vector3(v, -2), n);
+	// return (subtract_vector3(v, scale_vector3(n, 2 * dot(&v, &n))));
+	// v = scale_vector3(v, -1);
+	return subtract_vector3(v, scale_vector3(n, 2 * dot(&v, &n)));
 }
 
 t_vector3 ray_color(t_ray *r, SDL_Renderer* renderer, double movex, double movez)
@@ -169,7 +187,7 @@ t_vector3 ray_color(t_ray *r, SDL_Renderer* renderer, double movex, double movez
 
 	t_sp sp2;
 	sp2.pos.x = movex;
-	sp2.pos.y = 0;
+	sp2.pos.y = 1;
 	sp2.pos.z = movez;
 	sp2.diameter = 1;
 
@@ -177,26 +195,28 @@ t_vector3 ray_color(t_ray *r, SDL_Renderer* renderer, double movex, double movez
 	float t2 = collide_sphere_3D(r, &sp2);
 
 	if (t < 0 && t2 > 0)
-	{
 		return (new_vector3(0, 0, 255));
-	}
+
+
 	else if (t > 0)
 	{
 		t_ray ref;
+		t_vector3 out_N;
 		ref.O = at(r, t);
 
-		t_vector3 test; init_vec3(&test, 0, 0, -1);
-		t_vector3 N = unit_vector3(subtract_vector3(ref.O, test));
+		// t_vector3 N = unit_vector3(subtract_vector3(ref.O, test));
 
 		// N.y *= -1;
 		// N.x *= -1;
 		// N.z *= -1;
 
-		if (dot(&r->D, &N) > 0)
-			N = scale_vector3(N, -1);
+		out_N = div_vector3(subtract_vector3(ref.O, sp2.pos), sp2.diameter);
+		// out_N = subtract_vector3(ref.O, sp2.pos);
 
+		if (dot(&r->D, &out_N) < 0)
+			out_N = scale_vector3(out_N, -1);
 
-		ref.D = reflect(unit_vector3(r->D), N);
+		ref.D = reflect(unit_vector3(r->D), out_N);
 
 		t = collide_sphere_3D(&ref, &sp2);
 
@@ -301,91 +321,3 @@ int main(int argc, char* args[]) {
 	return 0;
 }
 
-/*
-int main( int argc, char* args[] )
-{
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
-	
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
-
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-	}
-	else
-	{
-		//Create window
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL )
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-		else
-		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
-
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-			
-			//Update the surface
-
-			SDL_RenderDrawPoint()
-
-			SDL_UpdateWindowSurface( window );
-
-			//Wait two seconds
-			SDL_Delay( 2000 );
-		}
-	}
-
-	//Destroy window
-	SDL_DestroyWindow( window );
-
-	//Quit SDL subsystems
-	SDL_Quit();
-
-	return 0;
-}
-
-Uint32 getpixel(SDL_Surface *surface, int x, int y)
-{
-	int bpp = surface->format->BytesPerPixel;
-	// Here p is the address to the pixel we want to retrieve
-Uint8* p = (Uint8*)surface->pixels + y * surface->pitch + x * bpp;
-
-switch (bpp)
-{
-case 1:
-	return *p;
-	break;
-
-case 2:
-	return *(Uint16*)p;
-	break;
-
-case 3:
-	if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-		return p[0] << 16 | p[1] << 8 | p[2];
-	else
-		return p[0] | p[1] << 8 | p[2] << 16;
-	break;
-
-case 4:
-	return *(Uint32*)p;
-	break;
-
-default:
-	return 0;      
-}
-}
-
-
-
-SDL_Color rgb;
-Uint32 data = getpixel(gSurface, 200, 200);
-SDL_GetRGB(data, gSurface->format, &rgb.r, &rgb.g, &rgb.b);
-
-
-*/
