@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/07/13 13:54:37 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/07/13 23:12:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ typedef struct s_vector3
 	double	y;
 	double	z;
 }	t_vector3;
+
+typedef struct s_ray
+{
+	t_vector3	O;
+	t_vector3	D;
+	double		t;
+	t_vector3	color;
+} t_ray;
 
 //coordinates for the corners of the screen
 typedef struct s_corners
@@ -117,11 +125,13 @@ typedef struct s_scene
 	int		n_cylinders;
 	int		n_planes;
 	int		n_lights;
-
 }	t_scene;
 
 typedef struct s_all
 {
+	void	*mlx;
+	void	*win;
+	t_data	img;
 	t_scene	scene;
 }	t_all;
 
