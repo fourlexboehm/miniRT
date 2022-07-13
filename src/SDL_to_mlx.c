@@ -183,40 +183,42 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 		t = collide_sphere_3D(&ref, &sp2);
 
 		if (t > 0)
-			return (new_vector3(0, 0, 255));
+			return (new_vector3(0, 0, 128));
 		return (new_vector3(0, 255, 0));
 	}
 
 	t_pl pl;
 	pl.pos = new_vector3(0,0, 10);
-	pl.rot = unit_vector3(new_vector3(0, 0, 10));
+	pl.rot = unit_vector3(new_vector3(0, 30, 77));
 
 	t_pl pl2;
-	pl2.pos = new_vector3(0, 0, 10);
-	pl2.rot = unit_vector3(new_vector3(0, 5, 4));
+	pl2.pos = new_vector3(0, 1, 0);
+	pl2.rot = unit_vector3(new_vector3(0, 45, 90));
 
 	// t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / dot(r->D, pl.rot);
 	// t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / dot(r->D, pl2.rot);
 	double d;
-	d = dot(pl.rot, r->D);
+	d = dot(unit_vector3(r->D), pl.rot);
 	if (fabs(d) > 0)
 	{
-		t_vector3 difference = subtract_vector3(pl.pos, r->O);
-		t = dot(difference, pl.rot) / d;
+		//t_vector3 difference = subtract_vector3(pl.pos, r->O);
+		t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / d;
+		//t = dot(difference, pl.rot) / d;
 	}
 
 	d = dot(pl2.rot, r->D);
 	if (fabs(d) > 0)
 	{
-		t_vector3 difference = subtract_vector3(pl2.pos, r->O);
-		t2 = dot(difference, pl2.rot) / d;
+		//t_vector3 difference = subtract_vector3(pl2.pos, r->O);
+		t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / d;
+		//t2 = dot(difference, pl2.rot) / d;
 	}
 
 
-	if (t > 0 && t > t2)
-		return (new_vector3(255, 0, 0));
-	else if (t2 > 0 && t2 > t)
-		return (new_vector3(255, 0, 255));
+	if (t > 0 && t < t2)
+		return (new_vector3(128, 0, 0));
+	else if (t2 > 0 && t2 < t)
+		return (new_vector3(64, 0, 128));
 
 
 
@@ -235,7 +237,7 @@ void render_frame(t_data* img)
 	t_cam cam;
 	cam.O.x = 0;
 	cam.O.y = 0;
-	cam.O.z = -3;
+	cam.O.z = -60;
 	cam.Dx = 0;
 	cam.Dy = 0;
 	cam.fov = 20;
@@ -315,8 +317,10 @@ int	next_frame(t_vars *v)
 	img.img = mlx_new_image(v->mlx, SCREEN_HEIGHT + 1, SCREEN_WIDTH + 1);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &endian);
 
+
 	render_frame(&img);
 	mlx_put_image_to_window(v->mlx, v->win, img.img, 0, 0);
+	mlx_destroy_image(v->mlx, img.img);
 	return(1);
 }
 
