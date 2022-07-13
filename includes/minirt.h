@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/06/24 15:04:59 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/07/13 13:54:37 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,15 +137,15 @@ double		ft_atof(const char *str);
 
 //	------------------------------vector------------------------
 
-t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
-t_vector3 	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
-void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
-t_vector3	scale_vector3(const t_vector3 vec, const double scale);
+// t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
+// t_vector3 	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
+// void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
+// t_vector3	scale_vector3(const t_vector3 vec, const double scale);
 
-double		get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
-double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+// double		get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
+// double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
 
-double		get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
-double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
+// double		get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
+// double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 
 #endif

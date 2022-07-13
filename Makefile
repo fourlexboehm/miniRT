@@ -60,7 +60,7 @@ r:
 
 sdl:
 	clear
-	gcc src/SDL_to_mlx.c src/vector_fun.c $(MLX_LNK) -o SDL_to_mlx.out
+	gcc src/SDL_to_mlx.c $(MLX_LNK) -o SDL_to_mlx.out
 	./SDL_to_mlx.out
 
 clean:
