@@ -1,6 +1,5 @@
 #include "../includes/minirt.h"
-#define PI 3.14
-//Screen dimension constants
+
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 1000;
 
@@ -73,7 +72,6 @@ t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2)
 	ret.x = v1.x - v2.x;
 	ret.y = v1.y - v2.y;
 	ret.z = v1.z - v2.z;
-	// printf_vector3('r', &ret);
 	return (ret);
 }
 
@@ -98,9 +96,9 @@ t_vector3 unit_vector3(t_vector3 v1)
 	return (v1);
 }
 
-double dot(t_vector3 *v1, t_vector3 *v2)
+double dot(t_vector3 v1, t_vector3 v2)
 {
-	return ((v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z));
+	return ((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
 }
 
 double length_squared(t_vector3 const v3)
@@ -128,7 +126,7 @@ float collide_sphere_3D(t_ray* r, t_sp* s)
 {
 	t_vector3 oc = subtract_vector3(r->O, s->pos);
 	float a = length_squared(r->D);
-	float b = dot(&oc, &r->D);
+	float b = dot(oc, r->D);
 	float c = length_squared(oc) - s->diameter * s->diameter;
 	float discriminant = (b * b) - (a * c);
 	if (discriminant < 0)
@@ -137,26 +135,11 @@ float collide_sphere_3D(t_ray* r, t_sp* s)
 		return ((-b - sqrt(discriminant)) / a);
 }
 
-float collide_sphere_3D_reflect(t_ray* r, t_sp* s)
-{
-	t_vector3 oc = subtract_vector3(r->O, s->pos);
-	float a = length_squared(r->D);
-	float b = dot(&oc, &r->D);
-	float c = length_squared(oc) - s->diameter * s->diameter;
-	float discriminant = (b * b) - (a * c);
-
-	double sqrtd = sqrt(discriminant);
-	double root;
-
-	root = (-b - sqrtd) / a;
-	return (root);
-}
-
 //--------------------------------------------------------------------------------------------------- ray color / reflect ------------------------------------
 
 t_vector3 reflect(t_vector3 v, t_vector3 n)
 {
-	return subtract_vector3(v, scale_vector3(n, 2 * dot(&v, &n)));
+	return subtract_vector3(v, scale_vector3(n, 2 * dot(v, n)));
 }
 
 t_vector3 ray_color(t_ray *r, double movex, double movez)
@@ -187,7 +170,7 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 		return (new_vector3(0, 0, 255));
 
 
-	else if (t > 0)
+	if (t > 0)
 	{
 		t_ray ref;
 		t_vector3 out_N;
@@ -200,21 +183,44 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 		t = collide_sphere_3D(&ref, &sp2);
 
 		if (t > 0)
-		{
 			return (new_vector3(0, 0, 255));
-		}
 		return (new_vector3(0, 255, 0));
 	}
 
-	color.x = 1;
-	color.y = 1;
-	color.z = 1;
+	t_pl pl;
+	pl.pos = new_vector3(0,0, 10);
+	pl.rot = unit_vector3(new_vector3(0, 0, 10));
 
-	t_vector3 colorb;
-	colorb.x = 0.5;
-	colorb.y = 0.7;
-	colorb.z = 1;
-	float n = (0.5 * (r->D.y + 1)) * 255 + 10;
+	t_pl pl2;
+	pl2.pos = new_vector3(0, 0, 10);
+	pl2.rot = unit_vector3(new_vector3(0, 5, 4));
+
+	// t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / dot(r->D, pl.rot);
+	// t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / dot(r->D, pl2.rot);
+	double d;
+	d = dot(pl.rot, r->D);
+	if (fabs(d) > 0)
+	{
+		t_vector3 difference = subtract_vector3(pl.pos, r->O);
+		t = dot(difference, pl.rot) / d;
+	}
+
+	d = dot(pl2.rot, r->D);
+	if (fabs(d) > 0)
+	{
+		t_vector3 difference = subtract_vector3(pl2.pos, r->O);
+		t2 = dot(difference, pl2.rot) / d;
+	}
+
+
+	if (t > 0 && t > t2)
+		return (new_vector3(255, 0, 0));
+	else if (t2 > 0 && t2 > t)
+		return (new_vector3(255, 0, 255));
+
+
+
+
 	return (new_vector3(0, 0, 0));
 }
 
@@ -242,7 +248,7 @@ void render_frame(t_data* img)
 	ray.t = 1000;
 	t_vector3 color;
 
-	double auto aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
+	double aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
 	double viewport_height = 2.0;
 	double viewport_width = aspect_ratio * viewport_height;
@@ -256,7 +262,6 @@ void render_frame(t_data* img)
 
 	static double movex = 3;
 	static double movez = 3;
-
 	for (int y = SCREEN_HEIGHT; y >= 0; --y) {
 		for (int x = 0; x < SCREEN_WIDTH; ++x) {
 			double u = (double)x / SCREEN_WIDTH;
@@ -265,8 +270,6 @@ void render_frame(t_data* img)
 			ray.D = subtract_vector3(add_vector3(add_vector3(lower_left_corner, scale_vector3(horizontal, u)), scale_vector3(vertical, v)), origin);
 			color = ray_color(&ray, movex, movez);
 			pixel_put(img, x, y, create_trgb(0, color.x, color.y, color.z));
-			// SDL_SetRenderDrawColor(renderer, color.x, color.y, color.z, 0);
-			// SDL_RenderDrawPoint(renderer, x, y);
 		}
 	}
 	static double angle = 0;
