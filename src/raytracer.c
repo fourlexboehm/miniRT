@@ -1,12 +1,5 @@
 #include "../includes/minirt.h"
 
-int raytracer()
-{
-
-// Camera
-
-}
-
 t_vector3 reflect(t_vector3 v, t_vector3 n)
 {
 	return subtract_vector3(v, scale_vector3(n, 2 * dot(v, n)));

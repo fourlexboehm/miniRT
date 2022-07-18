@@ -7,8 +7,9 @@ INCDIR	= ./includes
 OBJDIR	= ./obj
 
 # src / obj files
-SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c colour.c \
-		parser/parser.c parser/parser_utils.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
+SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c colour.c raytracer.c \
+		parser/parser.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
+		circle_collider.c plane_collider.c
 
 OBJ		= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
