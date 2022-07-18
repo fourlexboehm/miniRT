@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/07/18 14:26:36 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/07/18 14:31:40 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,13 @@ typedef struct s_scene
 	int		n_cylinders;
 	int		n_planes;
 	int		n_lights;
-
 }	t_scene;
 
 typedef struct s_all
 {
+	void	*mlx;
+	void	*win;
+	t_data	img;
 	t_scene	scene;
 }	t_all;
 
