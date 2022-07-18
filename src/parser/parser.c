@@ -72,7 +72,7 @@ static void	malloc_objs(t_scene *scene)
 	ft_printf("...done\n");
 }
 
-static void	assign_scene(t_scene *scene, char **line)
+void	assign_scene(t_scene *scene, char **line)
 {
 	int		i;
 
