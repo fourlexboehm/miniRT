@@ -12,7 +12,7 @@ t_vector3 reflect(t_vector3 v, t_vector3 n)
 	return subtract_vector3(v, scale_vector3(n, 2 * dot(v, n)));
 }
 
-void ray_color(t_ray *r, t_scene *s)
+void	check_collide(t_ray *r, t_scene *s)
 {
 	int    i;
     double t;
@@ -50,6 +50,32 @@ void ray_color(t_ray *r, t_scene *s)
         }
     }
 	*/
+}
+
+void	get_light(t_ray *r, t_scene *s)
+{
+	int	i;
+
+	r->O = at(r, r->t);
+	i = -1;
+	while (i < s->n_lights)
+	{
+		r->D = unit_vector3(subtract_vector3(r->O, s->lights[i].pos));
+		check_collide(r, s);
+		if (r->t < get_distance_vector3(&r->O, &s->lights[i].pos))
+		{
+			r->color.r *= .5;
+			r->color.g *= .5;
+			r->color.b *= .5;
+		}
+	}
+}
+
+void ray_color(t_ray *r, t_scene *s)
+{
+	check_collide(r, s);
 	if (r->t == DBL_MAX)
 		r->color = s->ambient_light.color;
+	else
+		get_light(r, s);
 }
