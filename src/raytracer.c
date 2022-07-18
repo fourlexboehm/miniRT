@@ -25,7 +25,7 @@ void	check_collide(t_ray *r, t_scene *s)
         if (t < r->t)
         {
             r->t = t;
-            r->color = s->spheres[i].color;
+            r->colour = s->spheres[i].colour;
         }
     }
 	i = -1;
@@ -35,7 +35,7 @@ void	check_collide(t_ray *r, t_scene *s)
         if (t < r->t)
         {
             r->t = t;
-            r->color = s->planes[i].color;
+            r->colour = s->planes[i].colour;
         }
     }
 	/* WIP
@@ -46,7 +46,7 @@ void	check_collide(t_ray *r, t_scene *s)
         if (t < r->t)
         {
             r->t = t;
-            r->color = s->cylinders[i].color;
+            r->colour = s->cylinders[i].colour;
         }
     }
 	*/
@@ -64,18 +64,18 @@ void	get_light(t_ray *r, t_scene *s)
 		check_collide(r, s);
 		if (r->t < get_distance_vector3(&r->O, &s->lights[i].pos))
 		{
-			r->color.r *= .5;
-			r->color.g *= .5;
-			r->color.b *= .5;
+			r->colour.r *= .5;
+			r->colour.g *= .5;
+			r->colour.b *= .5;
 		}
 	}
 }
 
-void ray_color(t_ray *r, t_scene *s)
+void ray_colour(t_ray *r, t_scene *s)
 {
 	check_collide(r, s);
 	if (r->t == DBL_MAX)
-		r->color = s->ambient_light.color;
+		r->colour = s->ambient_light.colour;
 	else
 		get_light(r, s);
 }
