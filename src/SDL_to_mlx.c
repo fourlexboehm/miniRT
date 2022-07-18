@@ -166,6 +166,16 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 	float t = collide_sphere_3D(r, &sp);
 	float t2 = collide_sphere_3D(r, &sp2);
 
+	t_pl pl;
+	pl.pos = new_vector3(0,0, 10);
+	pl.rot = unit_vector3(new_vector3(0, 0, 90));
+
+	t_pl pl2;
+	pl2.pos = new_vector3(0, 3, 10);
+	pl2.rot = unit_vector3(new_vector3(0, 100, 90));
+
+	double d;
+
 	if (t < 0 && t2 > 0)
 		return (new_vector3(0, 0, 255));
 
@@ -184,20 +194,37 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 
 		if (t > 0)
 			return (new_vector3(0, 0, 128));
-		return (new_vector3(0, 255, 0));
-	}
 
-	t_pl pl;
-	pl.pos = new_vector3(0,0, 10);
-	pl.rot = unit_vector3(new_vector3(0, 30, 77));
+		d = dot(unit_vector3(ref.D), pl.rot);
+		if (fabs(d) > 0)
+		{
+			//t_vector3 difference = subtract_vector3(pl.pos, r->O);
+			t = dot(subtract_vector3(pl.pos, ref.O), pl.rot) / d;
+			//t = dot(difference, pl.rot) / d;
+		}
 
-	t_pl pl2;
-	pl2.pos = new_vector3(0, 1, 0);
-	pl2.rot = unit_vector3(new_vector3(0, 45, 90));
+		d = dot(pl2.rot, ref.D);
+		if (fabs(d) > 0)
+		{
+			//t_vector3 difference = subtract_vector3(pl2.pos, r->O);
+			t2 = dot(subtract_vector3(pl2.pos, ref.O), pl2.rot) / d;
+			//t2 = dot(difference, pl2.rot) / d;
+		}
+
+
+		if (t > 0 && t < t2)
+			return (new_vector3(128, 0, t * 5));
+		else if (t2 > 0 && t2 < t)
+			return (new_vector3(128, (t * 5) - 10, 0));
+			
+			return (new_vector3(0, 255, 0));
+		}
+
+	
 
 	// t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / dot(r->D, pl.rot);
 	// t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / dot(r->D, pl2.rot);
-	double d;
+	
 	d = dot(unit_vector3(r->D), pl.rot);
 	if (fabs(d) > 0)
 	{
@@ -216,11 +243,9 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 
 
 	if (t > 0 && t < t2)
-		return (new_vector3(128, 0, 0));
+		return (new_vector3(128, 0, t * 5));
 	else if (t2 > 0 && t2 < t)
-		return (new_vector3(64, 0, 128));
-
-
+		return (new_vector3(128, (t * 5) - 10, 0));
 
 
 	return (new_vector3(0, 0, 0));
@@ -237,7 +262,7 @@ void render_frame(t_data* img)
 	t_cam cam;
 	cam.O.x = 0;
 	cam.O.y = 0;
-	cam.O.z = -60;
+	cam.O.z = -3;
 	cam.Dx = 0;
 	cam.Dy = 0;
 	cam.fov = 20;

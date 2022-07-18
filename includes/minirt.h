@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/07/13 13:54:37 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/07/18 14:26:36 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <pthread.h>
 # include <math.h>
+# include <float.h>
 
 # define KEY_ESC 53
 # define WIN_WIDTH 1280
@@ -27,9 +28,9 @@
 
 typedef struct s_rgba
 {
+	uint8_t		r;
 	uint8_t		b;
 	uint8_t		g;
-	uint8_t		r;
 }					t_rgba;
 
 typedef struct s_image
@@ -48,7 +49,14 @@ typedef struct s_vector3
 	double	z;
 }	t_vector3;
 
-//coordinates for the corners of the screen
+typedef struct s_ray
+{
+	t_vector3	O;
+	t_vector3	D;
+	t_rgba		color;
+	double		t;
+} t_ray;
+
 typedef struct s_corners
 {
 	t_vector3	tl;
@@ -57,7 +65,7 @@ typedef struct s_corners
 	t_vector3	br;
 }	t_corners;
 
-// --------------------------objs------------------
+// -------------------------- objs ------------------
 
 typedef	struct s_ambient_light
 {
@@ -102,7 +110,7 @@ typedef	struct s_sp
 	t_rgba		color;
 }	t_sp;
 
-// --------------------------end objs------------------
+// -------------------------- end objs ------------------
 
 //contains an array of objs, a camera and lights
 typedef struct s_scene
@@ -135,17 +143,27 @@ void		render_image_on_mlx(int	**matrix_colors);
 //utils
 double		ft_atof(const char *str);
 
-//	------------------------------vector------------------------
+//	------------------------------ vector ------------------------
 
-// t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
-// t_vector3 	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
-// void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
-// t_vector3	scale_vector3(const t_vector3 vec, const double scale);
+t_vector3	scale_vector3(const t_vector3 vec, const double scale);
+t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
+t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
+void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
+t_vector3	div_vector3(const t_vector3 vec, const double scale);
+void		init_vec3(t_vector3 *v, double x, double y, double z);
+t_vector3 	at(t_ray* ray, double t);
+t_vector3 	unit_vector3(t_vector3 v1);
+double		dot(t_vector3 v1, t_vector3 v2);
+double		length_squared(t_vector3 const v3);
+double		length(t_vector3 const v3);
+t_vector3	new_vector3(double x, double y, double z);
+double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 
-// double		get_distance_vector2(t_vector3 *v1, t_vector3 *v2);
-// double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+//	------------------------------ colliders ------------------------
 
-// double		get_coord_rad_vector3(t_vector3 *v1, t_vector3 *v2);
-// double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
+double		collide_sphere(t_ray* r, t_sp* s);
+double		collide_plane(t_ray *r, t_pl *pl);
 
 #endif
