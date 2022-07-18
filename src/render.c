@@ -20,7 +20,7 @@ static	int	close_window(t_vars *vars)
 	exit (0);
 }
 
-static void	render_pixels(t_data	*img, int **matrix_colors)
+static void	render_pixels(t_data	*img, int **matrix_colours)
 {
 	int		x;
 	int		y;
@@ -34,12 +34,12 @@ static void	render_pixels(t_data	*img, int **matrix_colors)
 		{
 			pixel = (y * img->line_length + x * (img->bits_per_pixel / 8))
 				+ img->addr;
-			*(unsigned int *)pixel = matrix_colors[x][y];
+			*(unsigned int *)pixel = matrix_colours[x][y];
 			x++;
 		}
 		y++;
 	}
-	//function call to free matrix_colors
+	//function call to free matrix_colours
 }
 
 static int	key_hook(int keycode, t_vars *vars)
@@ -53,9 +53,9 @@ static int	key_hook(int keycode, t_vars *vars)
  * * Initialize mlx to render image following
  * https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html
  * (writing-pixels-to-a-image)
- * @param matrix_colors	matrix of colors to render
+ * @param matrix_colours	matrix of colours to render
 */
-void	render_image_on_mlx(int	**matrix_colors)
+void	render_image_on_mlx(int	**matrix_colours)
 {
 	t_vars	v;
 	int		endian;
@@ -65,7 +65,7 @@ void	render_image_on_mlx(int	**matrix_colors)
 	v.img.img = mlx_new_image(v.mlx, WIN_WIDTH, WIN_HEIGHT);
 	v.img.addr = mlx_get_data_addr(v.img.img, &v.img.bits_per_pixel,
 			&v.img.line_length, &endian);
-	render_pixels(&v.img, matrix_colors);
+	render_pixels(&v.img, matrix_colours);
 	mlx_put_image_to_window(v.mlx, v.win, v.img.img, 0, 0);
 	mlx_key_hook(v.win, key_hook, &v);
 	mlx_hook(v.win, 17, 1L << 17, close_window, &v);

@@ -13,13 +13,13 @@ static void	assign_ambient_light(t_scene *scene, char *line)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->ambient_light.color.r = ft_atoi(&line[j]);
+	scene->ambient_light.colour.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->ambient_light.color.g = ft_atoi(&line[j]);
+	scene->ambient_light.colour.g = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->ambient_light.color.b = ft_atoi(&line[j]);
+	scene->ambient_light.colour.b = ft_atoi(&line[j]);
 	ft_printf("...done\n");
 }
 
@@ -101,9 +101,9 @@ void	assign_scene(t_scene *scene, char **line)
 //void	printf_ambient_light(t_ambient_light *ambient_light)
 //{
 //	printf("ambient_light value = %f\n", ambient_light->ambient);
-//	printf("ambient_light R = %u\n", ambient_light->color.r);
-//	printf("ambient_light G = %u\n", ambient_light->color.g);
-//	printf("ambient_light B = %u\n", ambient_light->color.b);
+//	printf("ambient_light R = %u\n", ambient_light->colour.r);
+//	printf("ambient_light G = %u\n", ambient_light->colour.g);
+//	printf("ambient_light B = %u\n", ambient_light->colour.b);
 //	printf("\n");
 //}
 //
@@ -125,9 +125,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("sphere pos y = %f\n", sphere->pos.y);
 //	printf("sphere pos z = %f\n", sphere->pos.z);
 //	printf("sphere diameter = %f\n", sphere->diameter);
-//	printf("sphere R = %u\n", sphere->color.r);
-//	printf("sphere G = %u\n", sphere->color.g);
-//	printf("sphere B = %u\n", sphere->color.b);
+//	printf("sphere R = %u\n", sphere->colour.r);
+//	printf("sphere G = %u\n", sphere->colour.g);
+//	printf("sphere B = %u\n", sphere->colour.b);
 //	printf("\n");
 //}
 //
@@ -141,9 +141,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("cylinder rot z = %f\n", cylinder->rot.z);
 //	printf("cylinder diameter = %f\n", cylinder->diameter);
 //	printf("cylinder height = %f\n", cylinder->height);
-//	printf("cylinder R = %u\n", cylinder->color.r);
-//	printf("cylinder G = %u\n", cylinder->color.g);
-//	printf("cylinder B = %u\n", cylinder->color.b);
+//	printf("cylinder R = %u\n", cylinder->colour.r);
+//	printf("cylinder G = %u\n", cylinder->colour.g);
+//	printf("cylinder B = %u\n", cylinder->colour.b);
 //	printf("\n");
 //}
 //
@@ -155,9 +155,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("plane rot x = %f\n", plane->rot.x);
 //	printf("plane rot y = %f\n", plane->rot.y);
 //	printf("plane rot z = %f\n", plane->rot.z);
-//	printf("plane R = %u\n", plane->color.r);
-//	printf("plane G = %u\n", plane->color.g);
-//	printf("plane B = %u\n", plane->color.b);
+//	printf("plane R = %u\n", plane->colour.r);
+//	printf("plane G = %u\n", plane->colour.g);
+//	printf("plane B = %u\n", plane->colour.b);
 //	printf("\n");
 //}
 //
@@ -167,9 +167,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("light pos y = %f\n", light->pos.y);
 //	printf("light pos z = %f\n", light->pos.z);
 //	printf("light brightness = %f\n", light->brightness);
-//	printf("light R = %u\n", light->color.r);
-//	printf("light G = %u\n", light->color.g);
-//	printf("light B = %u\n", light->color.b);
+//	printf("light R = %u\n", light->colour.r);
+//	printf("light G = %u\n", light->colour.g);
+//	printf("light B = %u\n", light->colour.b);
 //	printf("\n");
 //}
 //

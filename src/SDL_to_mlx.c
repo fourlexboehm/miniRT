@@ -9,7 +9,7 @@ const int SCREEN_HEIGHT = 1000;
 //--------------------------------------------------------------------------------- sphere colliders ---------------------------------------------
 
 
-//--------------------------------------------------------------------------------------------------- ray color / reflect ------------------------------------
+//--------------------------------------------------------------------------------------------------- ray colour / reflect ------------------------------------
 
 <<<<<<< HEAD
 t_vector3 reflect(t_vector3 v, t_vector3 n)
@@ -17,14 +17,14 @@ t_vector3 reflect(t_vector3 v, t_vector3 n)
 	return subtract_vector3(v, scale_vector3(n, 2 * dot(v, n)));
 }
 
-t_vector3 ray_color(t_ray *r, double movex, double movez)
+t_vector3 ray_colour(t_ray *r, double movex, double movez)
 {
 	double mod = 2;
 
-	t_vector3 color;
-	color.x = 1;
-	color.y = 0;
-	color.z = 0;
+	t_vector3 colour;
+	colour.x = 1;
+	colour.y = 0;
+	colour.z = 0;
 
 	t_sp sp;
 	sp.pos.x = 0;
@@ -130,7 +130,7 @@ t_vector3 ray_color(t_ray *r, double movex, double movez)
 
 //--------------------------------------------------------------------------------------------------- Frame Render
 
-void	pixel_put(t_data *r, int x, int y, int color);
+void	pixel_put(t_data *r, int x, int y, int colour);
 int		create_trgb(int t, int r, int g, int b);
 
 void render_frame(t_data* img)
@@ -150,7 +150,7 @@ void render_frame(t_data* img)
 	ray.O.z = cam.O.z;
 	ray.D.z = 0;
 	ray.t = 1000;
-	t_vector3 color;
+	t_vector3 colour;
 
 	double aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
@@ -172,8 +172,8 @@ void render_frame(t_data* img)
 			double v = (double)y / SCREEN_HEIGHT;
 
 			ray.D = subtract_vector3(add_vector3(add_vector3(lower_left_corner, scale_vector3(horizontal, u)), scale_vector3(vertical, v)), origin);
-			color = ray_color(&ray, movex, movez);
-			pixel_put(img, x, y, create_trgb(0, color.x, color.y, color.z));
+			colour = ray_colour(&ray, movex, movez);
+			pixel_put(img, x, y, create_trgb(0, colour.x, colour.y, colour.z));
 		}
 	}
 	static double angle = 0;
@@ -192,12 +192,12 @@ static int	key_hook(int keycode)
 		exit(0);
 	return (0);
 }
-void	pixel_put(t_data *r, int x, int y, int color)
+void	pixel_put(t_data *r, int x, int y, int colour)
 {
 	char	*dst;
 
 	dst = r->addr + (y * r->line_length + x * (r->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
+	*(unsigned int *)dst = colour;
 }
 int	create_trgb(int t, int r, int g, int b)
 {

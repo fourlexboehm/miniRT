@@ -53,7 +53,7 @@ typedef struct s_ray
 {
 	t_vector3	O;
 	t_vector3	D;
-	t_rgba		color;
+	t_rgba		colour;
 	double		t;
 } t_ray;
 
@@ -70,7 +70,7 @@ typedef struct s_corners
 typedef	struct s_ambient_light
 {
 	double		ambient;
-	t_rgba		color;
+	t_rgba		colour;
 }	t_ambient_light;
 
 typedef	struct s_camera
@@ -84,14 +84,14 @@ typedef	struct s_L
 {
 	t_vector3	pos;
 	double		brightness;
-	t_rgba		color;
+	t_rgba		colour;
 }	t_L;
 
 typedef	struct s_pl
 {
 	t_vector3	pos;
 	t_vector3	rot;
-	t_rgba		color;
+	t_rgba		colour;
 }	t_pl;
 
 typedef	struct s_cy
@@ -100,14 +100,14 @@ typedef	struct s_cy
 	t_vector3	rot;
 	double		diameter;
 	double		height;
-	t_rgba		color;
+	t_rgba		colour;
 }	t_cy;
 
 typedef	struct s_sp
 {
 	t_vector3	pos;
 	double		diameter;
-	t_rgba		color;
+	t_rgba		colour;
 }	t_sp;
 
 // -------------------------- end objs ------------------
@@ -141,7 +141,7 @@ t_vector3	**calculate_viewport_vectors(t_camera cam);
 t_vector3	**set_cam_vectors(t_corners corn);
 
 //mlx
-void		render_image_on_mlx(int	**matrix_colors);
+void		render_image_on_mlx(int	**matrix_colours);
 //utils
 double		ft_atof(const char *str);
 
@@ -180,6 +180,9 @@ double		collide_sphere(t_ray* r, t_sp* s);
 double		collide_plane(t_ray *r, t_pl *pl);
 
 // -------------------------- ray ------------------------
-void	ray_color(t_ray *r, t_scene *s);
+void	ray_colour(t_ray *r, t_scene *s);
+
+// -------------------------- colour------------------------
+int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene);
 
 #endif

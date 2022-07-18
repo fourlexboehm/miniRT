@@ -7,7 +7,7 @@ INCDIR	= ./includes
 OBJDIR	= ./obj
 
 # src / obj files
-SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c \
+SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c colour.c \
 		parser/parser.c parser/parser_utils.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
 
 OBJ		= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
@@ -40,6 +40,7 @@ all: obj $(FT_LIB) $(MLX_LIB) $(NAME)
 obj:
 	mkdir -p $(OBJDIR)
 	mkdir -p $(OBJDIR)/viewport
+	mkdir -p $(OBJDIR)/parser
 
 $(OBJDIR)/%.o:$(SRCDIR)/%.c
 	$(CC) $(CFLAGS) $(MLX_INC) $(FT_INC) -I $(INCDIR) -o $@ -c $<

@@ -9,13 +9,13 @@ void	assign_more_sphere(const t_scene *scene, const char *line, int j, int i)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->spheres[i].color.r = ft_atoi(&line[j]);
+	scene->spheres[i].colour.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->spheres[i].color.g = ft_atoi(&line[j]);
+	scene->spheres[i].colour.g = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->spheres[i].color.b = ft_atoi(&line[j]);
+	scene->spheres[i].colour.b = ft_atoi(&line[j]);
 	i++;
 }
 
@@ -58,13 +58,13 @@ static void	assign_more_cylinder(t_scene *scene, const char *line, int j, int i)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->cylinders[i].color.r = ft_atoi(&line[j]);
+	scene->cylinders[i].colour.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->cylinders[i].color.g = ft_atoi(&line[j]);
+	scene->cylinders[i].colour.g = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->cylinders[i].color.b = ft_atoi(&line[j]);
+	scene->cylinders[i].colour.b = ft_atoi(&line[j]);
 	i++;
 }
 

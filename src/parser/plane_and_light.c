@@ -12,13 +12,13 @@ void	assign_more_plane(const t_scene *scene, const char *line, int j, int i)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->planes[i].color.r = ft_atoi(&line[j]);
+	scene->planes[i].colour.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->planes[i].color.g = ft_atoi(&line[j]);
+	scene->planes[i].colour.g = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->planes[i].color.b = ft_atoi(&line[j]);
+	scene->planes[i].colour.b = ft_atoi(&line[j]);
 	i++;
 }
 
@@ -56,13 +56,13 @@ void	assign_more_light(const t_scene *scene, const char *line, int j, int i)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->lights[i].color.r = ft_atoi(&line[j]);
+	scene->lights[i].colour.r = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->lights[i].color.g = ft_atoi(&line[j]);
+	scene->lights[i].colour.g = ft_atoi(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->lights[i].color.b = ft_atoi(&line[j]);
+	scene->lights[i].colour.b = ft_atoi(&line[j]);
 	i++;
 	ft_printf("...done\n");
 }
