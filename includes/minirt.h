@@ -145,6 +145,13 @@ void		render_image_on_mlx(int	**matrix_colors);
 //utils
 double		ft_atof(const char *str);
 
+//parser
+void		assign_scene(t_scene *scene, char **line);
+void		get_n_obs(char **line, t_scene *scene);
+void		next_num(char *line, int *j);
+void		set_vector3(t_vector3 *vec, char *line, int *j);
+char		**get_file(char *path);
+
 //	------------------------------ vector ------------------------
 
 t_vector3	scale_vector3(const t_vector3 vec, const double scale);

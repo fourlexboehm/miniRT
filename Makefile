@@ -8,6 +8,7 @@ OBJDIR	= ./obj
 
 # src / obj files
 SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c \
+		parser/parser.c parser/parser_utils.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
 
 OBJ		= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
