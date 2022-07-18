@@ -131,7 +131,7 @@ typedef struct s_all
 {
 	void	*mlx;
 	void	*win;
-	t_data	img;
+	t_image	img;
 	t_scene	scene;
 }	t_all;
 
@@ -147,6 +147,10 @@ double		ft_atof(const char *str);
 
 //parser
 void		assign_scene(t_scene *scene, char **line);
+void		assign_plane(t_scene *scene, char *line);
+void		assign_light(t_scene *scene, char *line);
+void		assign_cylinder(t_scene *scene, char *line);
+void		assign_sphere(t_scene *scene, char *line);
 void		get_n_obs(char **line, t_scene *scene);
 void		next_num(char *line, int *j);
 void		set_vector3(t_vector3 *vec, char *line, int *j);
@@ -174,5 +178,8 @@ double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 
 double		collide_sphere(t_ray* r, t_sp* s);
 double		collide_plane(t_ray *r, t_pl *pl);
+
+// -------------------------- ray ------------------------
+void	ray_color(t_ray *r, t_scene *s);
 
 #endif
