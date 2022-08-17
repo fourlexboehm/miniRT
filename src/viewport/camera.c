@@ -12,17 +12,18 @@ static void	set_cam_vertical_borders(t_vector3 **matrix)
 	int			ctr;
 	int			max_x;
 	int			max_y;
-	t_vector3	diff;
+	t_vector3	diff_left;
+	t_vector3	diff_right;
 
-	ctr = 1.0;
+	ctr = 1;
 	max_x = WIN_WIDTH - 1;
 	max_y = WIN_HEIGHT - 1;
+	diff_left = subtract_vector3(matrix[0][max_y], matrix[0][0]);
+	diff_right = subtract_vector3(matrix[max_x][max_y], matrix[max_x][0]);
 	while (ctr < WIN_HEIGHT)
 	{
-		diff = subtract_vector3(matrix[0][max_y], matrix[0][0]);
-		matrix[0][ctr] = add_vector3(matrix[0][0], scale_vector3(diff, ctr / (max_y))); //should maybe be WIN_HEIGHT INSTEAD
-		diff = subtract_vector3(matrix[max_x][max_y], matrix[max_x][0]);
-		matrix[max_x][ctr] = add_vector3(matrix[max_x][0], scale_vector3(diff, ctr / (max_y)));
+		matrix[0][ctr] = add_vector3(matrix[0][0], scale_vector3(diff_left, (float)ctr / (float)(max_y)));
+		matrix[max_x][ctr] = add_vector3(matrix[max_x][0], scale_vector3(diff_right, (float)ctr / (float)(max_y)));
 		ctr++;
 	}
 }
@@ -46,7 +47,7 @@ static void	set_cam_middle(t_vector3 **matrix)
 		diff = subtract_vector3(matrix[max_x][ctr_y], matrix[0][ctr_y]);
 		while (++ctr_x < max_x)
 			matrix[ctr_x][ctr_y] = add_vector3(matrix[0][ctr_y],
-					scale_vector3(diff, ctr_x / (max_x)));
+					scale_vector3(diff, (double)ctr_x / (max_x)));
 		ctr_y++;
 	}
 }
