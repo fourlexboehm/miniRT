@@ -1,5 +1,5 @@
 #include "../includes/minirt.h"
-
+//TODO add T as argument?
 static int	create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
@@ -13,17 +13,11 @@ static int	**create_colour_matrix(void)
 	int		i;
 	int		**c_matrix;
 
-	c_matrix = malloc(sizeof(int *) * (WIN_WIDTH + 1));
-	c_matrix[WIN_HEIGHT] = NULL;
+	c_matrix = ft_calloc(sizeof(t_ray *), WIN_HEIGHT + 1);
 	i = -1;
 	while (++i < WIN_HEIGHT)
 	{
-		c_matrix[i] = malloc(sizeof(t_ray) * (WIN_WIDTH + 1));
-//		c_matrix[i][WIN_WIDTH].D = NULL;
-	}
-	{
-		c_matrix[i] = malloc(sizeof(t_ray) * (WIN_HEIGHT + 1));
-		c_matrix[i][WIN_HEIGHT] = 0;
+		c_matrix[i] = ft_calloc(sizeof(t_ray), WIN_WIDTH + 1);
 	}
 	return (c_matrix);
 }
@@ -50,7 +44,7 @@ int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene)
 			r.O = scene.camera.pos;
 			r.t = DBL_MAX;
 			ray_colour(&r, &scene);
-			c_matrix[x][y] = create_trgb(0, r.colour.r, r.colour.g, r.colour.b);
+			c_matrix[y][x] = create_trgb(r.t, r.colour.r, r.colour.g, r.colour.b);
 		}
 	}
 	free2d_array((void **) v_matrix);
