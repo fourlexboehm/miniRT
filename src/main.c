@@ -15,7 +15,7 @@ int	main(int argc, char **argv)
 		free(file);
 	}
 	else
-		line = get_file("scenes/1.rt");
+		line = get_file("scenes/subject_example2.rt");
 	assign_scene(&scene, line);
 	v_matrix = calculate_viewport_vectors(scene.camera);
 	c_matrix = set_colour_matrix(v_matrix, scene);
