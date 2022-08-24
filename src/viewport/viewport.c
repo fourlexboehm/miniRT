@@ -9,11 +9,12 @@ static t_vector3	vector_to_unit(t_vector3 v)
 	double		mag;
 
 	mag = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (mag == 0.0)
-	{
-		printf("Invalid input file: Camera vector is 0\n");
-		exit (99);
-	}
+	//TODO SHOULD THIS BE A NORMALIZED VECTOR
+//	if (mag == 0.0)
+//	{
+//		printf("Invalid input file: Camera vector is 0\n");
+//		exit (99);
+//	}
 	unit.x = v.x / mag;
 	unit.y = v.y / mag;
 	unit.z = v.z / mag;
@@ -36,11 +37,11 @@ t_vector3 a, double fov)
 	ang_tan = tanf((fov / 2.0) * M_PI / 180.0);
 	scaled_v_x_tan = scale_vector3(a, ang_tan * (9.0 / 16.0));
 	scaled_q = scale_vector3(unit_q, ang_tan);
-	corn.tl = add_vector3(subtract_vector3(unit_v, scaled_q), scaled_v_x_tan);
-	corn.tr = add_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan);
-	corn.bl = subtract_vector3(subtract_vector3(unit_v, scaled_q),
-			scaled_v_x_tan);
-	corn.br = subtract_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan);
+	corn.tl = unit_vector3(add_vector3(subtract_vector3(unit_v, scaled_q), scaled_v_x_tan));
+	corn.tr = unit_vector3(add_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan));
+	corn.bl = unit_vector3(subtract_vector3(subtract_vector3(unit_v, scaled_q),
+			scaled_v_x_tan));
+	corn.br = unit_vector3(subtract_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan));
 	return (corn);
 }
 

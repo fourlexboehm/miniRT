@@ -13,11 +13,11 @@ static int	**create_colour_matrix(void)
 	int		i;
 	int		**c_matrix;
 
-	c_matrix = ft_calloc(sizeof(t_ray *), WIN_HEIGHT + 1);
+	c_matrix = ft_calloc(sizeof(t_ray *), WIN_WIDTH + 1);
 	i = -1;
-	while (++i < WIN_HEIGHT)
+	while (++i < WIN_WIDTH)
 	{
-		c_matrix[i] = ft_calloc(sizeof(t_ray), WIN_WIDTH + 1);
+		c_matrix[i] = ft_calloc(sizeof(t_ray), WIN_HEIGHT + 1);
 	}
 	return (c_matrix);
 }
@@ -40,11 +40,19 @@ int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene)
 		x = -1;
 		while (++x < WIN_WIDTH)
 		{
-			r.D = v_matrix[y][x];
+			r.D = v_matrix[x][y];
 			r.O = scene.camera.pos;
 			r.t = DBL_MAX;
+//			r.colour.r = abs((int)(v_matrix[x][y].x * 255));
+//			r.colour.b = abs((int)(v_matrix[x][y].y * 255));
+//			r.colour.r = 0;
+//			r.colour.b = 0;
+//			if (v_matrix[x][y].x == 1 || v_matrix[x][y].y == 1 || v_matrix[x][y].z == 1)
+//				r.colour.g = 255;
+//			else
+//				r.colour.g = 0;
 			ray_colour(&r, &scene);
-			c_matrix[y][x] = create_trgb(r.t, r.colour.r, r.colour.g, r.colour.b);
+			c_matrix[x][y] = create_trgb(0, r.colour.r, r.colour.g, r.colour.b);
 		}
 	}
 	free2d_array((void **) v_matrix);
