@@ -56,9 +56,9 @@ $(NAME): $(OBJ)
 
 r:
 	clear
-	make
+	make re
 	clear
-	@./$(NAME)
+	@./$(NAME) scenes/two_spheres.rt
 
 clean:
 	rm -rf $(OBJDIR)

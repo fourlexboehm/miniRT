@@ -9,6 +9,5 @@ double collide_sphere(t_ray* r, t_sp* s)
 	double discriminant = (b * b) - (a * c);
 	if (discriminant < 0)
 		return (DBL_MAX);
-	else
-		return ((-b - sqrt(discriminant)) / a);
+	return ((-b - sqrt(discriminant)) / a);
 }
