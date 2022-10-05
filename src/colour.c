@@ -47,6 +47,12 @@ int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene)
 			c_matrix[x][y] = create_trgb(0, r.colour.r, r.colour.g, r.colour.b);
 		}
 	}
+	t_ray *temp = &scene.last_ray;
+	printf("last t was %lf\n", scene.last_t);
+	printf("at	x:%lf	y:%lf	z:%lf\nsphere	x:%lf	y:%lf	z:%lf\n", at(temp, scene.last_t).x, at(temp, scene.last_t).y, at(temp, scene.last_t).z, scene.spheres[0].pos.x, scene.spheres[0].pos.y, scene.spheres[0].pos.z);
+	printf("distance from cam to ball is %lf\n", get_distance_vector3(scene.spheres[0].pos, scene.last_ray.O));
+	printf("distance from 0,0,0 to 0,250,0 is %lf\n", get_distance_vector3(new_vector3(0,0,0), new_vector3(0,250,0)));
+	printf("ray pos	x:%lf	y:%lf	z:%lf\n", temp->O.x, temp->O.y, temp->O.z);
 	free2d_array((void **) v_matrix);
 	return (c_matrix);
 }

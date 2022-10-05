@@ -10,7 +10,7 @@ double getAngle(t_vector3 a, t_vector3 b)
 	return (acos( dot(a, b) / ((sqrt( a.x * a.x + a.y * a.y + a.z * a.z ) + 0.0000001) * ( sqrt( b.x * b.x + b.y * b.y + b.z * b.z ) + 0.0000001))));
 }
 
-void	check_collide(t_ray *r, t_scene *s)
+void	check_collide(t_ray *r, t_scene *s, void *exempt)
 {
 	int		i;
 	double	t;
@@ -19,25 +19,34 @@ void	check_collide(t_ray *r, t_scene *s)
 	i = -1;
 	while (++i < s->n_spheres)
 	{
-		t = collide_sphere(r, &s->spheres[i]);
-		if (t < r->t)
+		// if (exempt != NULL)
+		// 	printf("exempt =	%p\n sphere =	%p\n", exempt, &s->spheres[i]);
+		if (&s->spheres[i] != exempt)
 		{
-			r->t = t;
-			r->colour = s->spheres[i].colour;
-			r->hitO = at(r, t);
-			r->hitD = unit_vector3(reflect(r->D, unit_vector3(subtract_vector3(r->O, s->spheres[i].pos))));
+			t = collide_sphere(r, &s->spheres[i]);
+			if (t < r->t)
+			{
+				r->t = t;
+				r->colour = s->spheres[i].colour;
+				r->hitO = at(r, t);
+				r->hitD = unit_vector3(reflect(r->D, unit_vector3(subtract_vector3(r->O, s->spheres[i].pos))));
+				r->hitObject = &s->spheres[i];
+			}
 		}
 	}
 	i = -1;
 	while (++i < s->n_planes)
 	{
-		t = collide_plane(r, &s->planes[i]);
-		if (t < r->t)
+		if (&s->planes[i] != exempt)
 		{
-			r->t = t;
-			r->hitO = at(r, t);
-			r->hitD = scale_vector3(unit_vector3(reflect(s->planes->rot, r->D)), 1);
-			r->colour = s->planes[i].colour;
+			t = collide_plane(r, &s->planes[i]);
+			if (t < r->t)
+			{
+				r->t = t;
+				r->hitO = at(r, t);
+				r->hitD = scale_vector3(unit_vector3(reflect(s->planes->rot, r->D)), 1);
+				r->colour = s->planes[i].colour;
+			}
 		}
 	}
 	i = -1;
@@ -50,6 +59,13 @@ void	check_collide(t_ray *r, t_scene *s)
             r->colour = s->cylinders[i].colour;
         }
     }
+
+
+	if ((t < s->last_t && t < DBL_MAX) || s->last_t == 0)
+	{
+		s->last_t = t;
+		s->last_ray = *r;
+	}
 }
 
 void	light_color(t_rgba *colour, double scalar)
@@ -119,6 +135,8 @@ void	scale_color(t_rgba *colour, double scalar)
 void	get_light(t_ray *r, t_scene *s)
 {
 	int	i;
+	t_ray light_ray;
+	double	light_dis;
 
 	if (s->n_lights == 0)
 	{
@@ -130,10 +148,22 @@ void	get_light(t_ray *r, t_scene *s)
 	i = -1;
 	while (++i < s->n_lights)
 	{
-		//double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
-		double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
-		double result = (angle * -180);
-		light_color(&r->hitColour, result * 2);
+		light_ray.O = r->hitO;
+		light_ray.D = unit_vector3(subtract_vector3(r->hitO, s->lights[i].pos));
+
+		check_collide(&light_ray, s, r->hitObject);
+		light_dis = get_distance_vector3(s->lights[i].pos, light_ray.O);
+		// if (light_ray.t != DBL_MAX)
+		// 	printf("Light t		= %lf | light dis	= %lf\n",light_ray.t, light_dis);
+		if (light_ray.t > 0 )//>= light_dis - 10 )
+		{
+			//double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
+			double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
+			double result = ((angle * -180) - get_distance_vector3(s->lights[i].pos, r->hitO)) * ((s->lights[i].brightness * 1) + .5);
+			light_color(&r->hitColour, result * 1);
+		}
+		// else
+		// 	light_color(&r->hitColour, -255);
 	}
 }
 
@@ -167,7 +197,8 @@ t_rgba addColour(t_rgba ColourA, t_rgba ColourB)
 
 void	ray_colour(t_ray *r, t_scene *s)
 {
-	check_collide(r, s);
+	r->hitObject = NULL;
+	check_collide(r, s, NULL);
 	r->hitColour = r->colour;
 	if (r->t == DBL_MAX)
 	{

@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/09/19 14:17:20 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/05 12:29:15 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_ray
 	t_vector3	hitO;
 	t_vector3	hitD;
 	t_rgba		hitColour;
+	void		*hitObject;
 } t_ray;
 
 typedef struct s_corners
@@ -128,6 +129,8 @@ typedef struct s_scene
 	int		n_cylinders;
 	int		n_planes;
 	int		n_lights;
+	double	last_t;
+	t_ray	last_ray;
 }	t_scene;
 
 typedef struct s_all
@@ -174,7 +177,7 @@ double		dot(t_vector3 v1, t_vector3 v2);
 double		length_squared(t_vector3 v3);
 double		length(t_vector3 v3);
 t_vector3	new_vector3(double x, double y, double z);
-double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
+double		get_distance_vector3(t_vector3 v1, t_vector3 v2);
 double 		get_coord_rad_vector3(t_vector3 v1, t_vector3 v2);
 double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
 t_vector3	reflect(t_vector3 v, t_vector3 n);

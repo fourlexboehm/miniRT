@@ -59,6 +59,12 @@ $(NAME): $(OBJ)
 
 r:
 	clear
+	make
+	clear
+	@./$(NAME) scenes/one_sphere.rt
+
+rr:
+	clear
 	make re
 	clear
 	@./$(NAME) scenes/two_spheres.rt

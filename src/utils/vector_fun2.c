@@ -24,10 +24,3 @@ t_vector3	new_vector3(double x, double y, double z)
 	rtn.z = z;
 	return (rtn);
 }
-
-double	get_distance_vector3(t_vector3 *v1, t_vector3 *v2)
-{
-	return(sqrt(pow(v2->x - v1->x, 2)
-				+ pow(v2->y - v1->y, 2)
-				+ pow(v2->z + v1->z, 2)));
-}
