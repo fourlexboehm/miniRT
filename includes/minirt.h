@@ -147,6 +147,7 @@ t_vector3	**set_cam_vectors(t_corners corn);
 void		render_image_on_mlx(int	**matrix_colours);
 //utils
 double		ft_atof(const char *str);
+int			second_degree_equation(double a, double b, double c, double d[2]);
 
 //parser
 void		assign_scene(t_scene *scene, char **line);
@@ -161,17 +162,17 @@ char		**get_file(char *path);
 
 //	------------------------------ vector ------------------------
 
-t_vector3	scale_vector3(const t_vector3 vec, const double scale);
-t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2);
-t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2);
+t_vector3	scale_vector3(t_vector3 vec, double scale);
+t_vector3	add_vector3(t_vector3 v1, t_vector3 v2);
+t_vector3	subtract_vector3(t_vector3 v1, t_vector3 v2);
 void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
-t_vector3	div_vector3(const t_vector3 vec, const double scale);
+t_vector3	div_vector3(t_vector3 vec, double scale);
 void		init_vec3(t_vector3 *v, double x, double y, double z);
 t_vector3 	at(t_ray* ray, double t);
 t_vector3 	unit_vector3(t_vector3 v1);
 double		dot(t_vector3 v1, t_vector3 v2);
-double		length_squared(t_vector3 const v3);
-double		length(t_vector3 const v3);
+double		length_squared(t_vector3 v3);
+double		length(t_vector3 v3);
 t_vector3	new_vector3(double x, double y, double z);
 double		get_distance_vector3(t_vector3 *v1, t_vector3 *v2);
 double 		get_coord_rad_vector3(t_vector3 v1, t_vector3 v2);
@@ -182,6 +183,8 @@ t_vector3	reflect(t_vector3 v, t_vector3 n);
 
 double		collide_sphere(t_ray* r, t_sp* s);
 double		collide_plane(t_ray *r, t_pl *pl);
+double		collide_sphere(t_ray* r, t_sp* s);
+int			collide_cylinder(t_ray ray, t_cy cylinder);
 
 // -------------------------- ray ------------------------
 void	ray_colour(t_ray *r, t_scene *s);

@@ -22,8 +22,8 @@ static void	set_cam_vertical_borders(t_vector3 **matrix)
 	diff_right = subtract_vector3(matrix[max_x][max_y], matrix[max_x][0]);
 	while (ctr < WIN_HEIGHT)
 	{
-		matrix[0][ctr] = add_vector3(matrix[0][0], scale_vector3(diff_left, (float)ctr / (float)(max_y)));
-		matrix[max_x][ctr] = add_vector3(matrix[max_x][0], scale_vector3(diff_right, (float)ctr / (float)(max_y)));
+		matrix[0][ctr] = add_vector3(matrix[0][0], scale_vector3(diff_left, (double)ctr / (double)(max_y)));
+		matrix[max_x][ctr] = add_vector3(matrix[max_x][0], scale_vector3(diff_right, (double)ctr / (double)(max_y)));
 		ctr++;
 	}
 }

@@ -40,18 +40,16 @@ void	check_collide(t_ray *r, t_scene *s)
 			r->colour = s->planes[i].colour;
 		}
 	}
-	/* WIP
 	i = -1;
     while (++i < s->n_cylinders)
     {
-        t = collide_cylinders(r, &s->cylinders[i]);
+        t = collide_cylinder(*r, s->cylinders[i]);
         if (t < r->t)
         {
             r->t = t;
             r->colour = s->cylinders[i].colour;
         }
     }
-	*/
 }
 
 void	light_color(t_rgba *colour, double scalar)
@@ -171,10 +169,11 @@ void	ray_colour(t_ray *r, t_scene *s)
 {
 	check_collide(r, s);
 	r->hitColour = r->colour;
-	
 	if (r->t == DBL_MAX)
 	{
-		r->colour = s->ambient_light.colour;
+		r->colour.r = 0;
+		r->colour.g = 0;
+		r->colour.b = 0;
 		scale_color(&r->colour, s->ambient_light.ambient);
 	}
 	else

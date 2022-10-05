@@ -39,7 +39,6 @@ static void	render_pixels(t_data	*img, int **matrix_colours)
 		}
 		y++;
 	}
-	//function call to free matrix_colours
 }
 
 static int	key_hook(int keycode, t_vars *vars)

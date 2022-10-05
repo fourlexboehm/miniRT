@@ -1,8 +1,8 @@
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
-double collide_plane(t_ray *r, t_pl *pl)
+double	collide_plane(t_ray *r, t_pl *pl)
 {
-	double d;
+	double	d;
 
 	d = dot(unit_vector3(r->D), pl->rot);
 	if (fabs(d) > 0)

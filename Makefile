@@ -7,11 +7,12 @@ INCDIR	= ./includes/
 OBJDIR	= ./obj/
 
 # src / obj files
-SRC		= main.c utils.c render.c vector_fun.c viewport/viewport.c viewport/camera.c colour.c raytracer.c \
+SRC		= main.c utils/utils.c render.c utils/vector_fun.c utils/vector_fun2.c utils/cylinder_utils.c \
+ 		viewport/viewport.c viewport/camera.c colour.c raytracer.c \
 		parser/parser.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
-		circle_collider.c plane_collider.c
+		colliders/plane_collider.c colliders/cylinder_collider.c colliders/sphere_collider.c\
 
-OBJ		= $(addprefix $(OBJDIR)/*,$(SRC:.c=.o))
+OBJ		= $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
 # compiler
 CC		= gcc
@@ -39,8 +40,10 @@ all: obj $(FT_LIB) $(MLX_LIB) $(NAME)
 
 obj:
 	mkdir -p $(OBJDIR)
-	mkdir -p $(OBJDIR)viewport
-	mkdir -p $(OBJDIR)parser
+	mkdir -p $(OBJDIR)/viewport
+	mkdir -p $(OBJDIR)/utils
+	mkdir -p $(OBJDIR)/parser
+	mkdir -p $(OBJDIR)/colliders
 
 $(OBJDIR)%.o:$(SRCDIR)%.c
 	$(CC) $(CFLAGS) $(MLX_INC) $(FT_INC) -I $(INCDIR) -o $@ -c $<

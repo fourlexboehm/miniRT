@@ -1,4 +1,6 @@
 .idea/*
 *.a
 *.o
+.vscode
+.idea
 miniRT

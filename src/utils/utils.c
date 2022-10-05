@@ -1,4 +1,16 @@
-#include "../includes/minirt.h"
+#include "minirt.h"
+
+//todo make sure this works right
+void	get_sign(const char **str, int *neg)
+{
+	if (*(*str) == '-')
+	{
+		(*neg) = -1;
+		++(*str);
+	}
+	else if (*(*str) == '+')
+		++(*str);
+}
 
 static double	get_decimal(const char *str)
 {
@@ -26,13 +38,7 @@ double	ft_atof(const char *str)
 	neg = 1;
 	while (ft_isspace(*str))
 		str++;
-	if (*str == '-')
-	{
-		neg = -1;
-		++str;
-	}
-	else if (*str == '+')
-		++str;
+	get_sign(&str, &neg);
 	value = 0;
 	while (*str != '.' && *str != ',' && !ft_isspace(*str))
 	{

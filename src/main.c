@@ -14,6 +14,7 @@ int	main(int argc, char **argv)
 	assign_scene(&scene, line);
 	v_matrix = calculate_viewport_vectors(scene.camera);
 	c_matrix = set_colour_matrix(v_matrix, scene);
-	//free v_matrix TODO
+	free2d_array((void **) line);
 	render_image_on_mlx(c_matrix);
+	free2d_array((void **) c_matrix);
 }

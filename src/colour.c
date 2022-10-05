@@ -43,14 +43,6 @@ int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene)
 			r.D = v_matrix[x][y];
 			r.O = scene.camera.pos;
 			r.t = DBL_MAX;
-//			r.colour.r = abs((int)(v_matrix[x][y].x * 255));
-//			r.colour.b = abs((int)(v_matrix[x][y].y * 255));
-//			r.colour.r = 0;
-//			r.colour.b = 0;
-//			if (v_matrix[x][y].x == 1 || v_matrix[x][y].y == 1 || v_matrix[x][y].z == 1)
-//				r.colour.g = 255;
-//			else
-//				r.colour.g = 0;
 			ray_colour(&r, &scene);
 			c_matrix[x][y] = create_trgb(0, r.colour.r, r.colour.g, r.colour.b);
 		}
