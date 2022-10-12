@@ -187,6 +187,7 @@ double		get_coord_deg_vec(t_vec *v1, t_vec *v2);
 double		sphere_collider(t_ray* r, t_sp* s);
 double		plane_collider(t_ray *r, t_pl *pl);
 int			cylinder_collider(t_ray ray, t_cy cylinder);
+void		get_cylinder_t(t_ray *ray, t_cy cylinder);
 
 // -------------------------- ray ------------------------
 void	ray_colour(t_ray *r, t_scene *s);

@@ -12,16 +12,16 @@
 ////--------------------------------------------------------------------------------------------------- ray colour / reflect ------------------------------------
 //
 //<<<<<<< HEAD
-//t_vector3 reflect(t_vector3 v, t_vector3 n)
+//t_vec reflect(t_vec v, t_vec n)
 //{
-//	return subtract_vector3(v, scale_vector3(n, 2 * dot(v, n)));
+//	return subtract_vec(v, scale_vector3(n, 2 * dot(v, n)));
 //}
 //
-//t_vector3 ray_colour(t_ray *r, double movex, double movez)
+//t_vec ray_colour(t_ray *r, double movex, double movez)
 //{
 //	double mod = 2;
 //
-//	t_vector3 colour;
+//	t_vec colour;
 //	colour.x = 1;
 //	colour.y = 0;
 //	colour.z = 0;
@@ -43,11 +43,11 @@
 //
 //	t_pl pl;
 //	pl.pos = new_vector3(0,0, 10);
-//	pl.rot = unit_vector3(new_vector3(0, 0, 90));
+//	pl.rot = unit_vec(new_vector3(0, 0, 90));
 //
 //	t_pl pl2;
 //	pl2.pos = new_vector3(0, 3, 10);
-//	pl2.rot = unit_vector3(new_vector3(0, 100, 90));
+//	pl2.rot = unit_vec(new_vector3(0, 100, 90));
 //
 //	double d;
 //
@@ -58,31 +58,31 @@
 //	if (t > 0)
 //	{
 //		t_ray ref;
-//		t_vector3 out_N;
+//		t_vec out_N;
 //		ref.O = at(r, t);
 //
-//		out_N = unit_vector3(subtract_vector3(ref.O, sp.pos));
+//		out_N = unit_vec(subtract_vec(ref.O, sp.pos));
 //
-//		ref.D = reflect(unit_vector3(r->D), out_N);
+//		ref.D = reflect(unit_vec(r->D), out_N);
 //
 //		t = collide_sphere_3D(&ref, &sp2);
 //
 //		if (t > 0)
 //			return (new_vector3(0, 0, 128));
 //
-//		d = dot(unit_vector3(ref.D), pl.rot);
+//		d = dot(unit_vec(ref.D), pl.rot);
 //		if (fabs(d) > 0)
 //		{
-//			//t_vector3 difference = subtract_vector3(pl.pos, r->O);
-//			t = dot(subtract_vector3(pl.pos, ref.O), pl.rot) / d;
+//			//t_vec difference = subtract_vec(pl.pos, r->O);
+//			t = dot(subtract_vec(pl.pos, ref.O), pl.rot) / d;
 //			//t = dot(difference, pl.rot) / d;
 //		}
 //
 //		d = dot(pl2.rot, ref.D);
 //		if (fabs(d) > 0)
 //		{
-//			//t_vector3 difference = subtract_vector3(pl2.pos, r->O);
-//			t2 = dot(subtract_vector3(pl2.pos, ref.O), pl2.rot) / d;
+//			//t_vec difference = subtract_vec(pl2.pos, r->O);
+//			t2 = dot(subtract_vec(pl2.pos, ref.O), pl2.rot) / d;
 //			//t2 = dot(difference, pl2.rot) / d;
 //		}
 //
@@ -97,22 +97,22 @@
 //
 //
 //
-//	// t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / dot(r->D, pl.rot);
-//	// t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / dot(r->D, pl2.rot);
+//	// t = dot(subtract_vec(pl.pos, r->O), pl.rot) / dot(r->D, pl.rot);
+//	// t2 = dot(subtract_vec(pl2.pos, r->O), pl2.rot) / dot(r->D, pl2.rot);
 //
-//	d = dot(unit_vector3(r->D), pl.rot);
+//	d = dot(unit_vec(r->D), pl.rot);
 //	if (fabs(d) > 0)
 //	{
-//		//t_vector3 difference = subtract_vector3(pl.pos, r->O);
-//		t = dot(subtract_vector3(pl.pos, r->O), pl.rot) / d;
+//		//t_vec difference = subtract_vec(pl.pos, r->O);
+//		t = dot(subtract_vec(pl.pos, r->O), pl.rot) / d;
 //		//t = dot(difference, pl.rot) / d;
 //	}
 //
 //	d = dot(pl2.rot, r->D);
 //	if (fabs(d) > 0)
 //	{
-//		//t_vector3 difference = subtract_vector3(pl2.pos, r->O);
-//		t2 = dot(subtract_vector3(pl2.pos, r->O), pl2.rot) / d;
+//		//t_vec difference = subtract_vec(pl2.pos, r->O);
+//		t2 = dot(subtract_vec(pl2.pos, r->O), pl2.rot) / d;
 //		//t2 = dot(difference, pl2.rot) / d;
 //	}
 //
@@ -150,7 +150,7 @@
 //	ray.O.z = cam.O.z;
 //	ray.D.z = 0;
 //	ray.t = 1000;
-//	t_vector3 colour;
+//	t_vec colour;
 //
 //	double aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT;
 //
@@ -158,11 +158,11 @@
 //	double viewport_width = aspect_ratio * viewport_height;
 //	double focal_length = 1.0;
 //
-//	t_vector3 origin; init_vec3(&origin, 0, 0, 0);
-//	t_vector3 horizontal; init_vec3(&horizontal, viewport_width, 0, 0);
-//	t_vector3 vertical; init_vec3(&vertical, 0, viewport_height, 0);
-//	t_vector3 focal; init_vec3(&focal, 0, 0, focal_length);
-//	t_vector3 lower_left_corner = subtract_vector3(subtract_vector3(origin, scale_vector3(horizontal, 0.5)), subtract_vector3(scale_vector3(vertical, 0.5), focal));
+//	t_vec origin; init_vec3(&origin, 0, 0, 0);
+//	t_vec horizontal; init_vec3(&horizontal, viewport_width, 0, 0);
+//	t_vec vertical; init_vec3(&vertical, 0, viewport_height, 0);
+//	t_vec focal; init_vec3(&focal, 0, 0, focal_length);
+//	t_vec lower_left_corner = subtract_vec(subtract_vec(origin, scale_vector3(horizontal, 0.5)), subtract_vec(scale_vector3(vertical, 0.5), focal));
 //
 //	static double movex = 3;
 //	static double movez = 3;
@@ -171,7 +171,7 @@
 //			double u = (double)x / SCREEN_WIDTH;
 //			double v = (double)y / SCREEN_HEIGHT;
 //
-//			ray.D = subtract_vector3(add_vector3(add_vector3(lower_left_corner, scale_vector3(horizontal, u)), scale_vector3(vertical, v)), origin);
+//			ray.D = subtract_vec(add_vector3(add_vector3(lower_left_corner, scale_vector3(horizontal, u)), scale_vector3(vertical, v)), origin);
 //			colour = ray_colour(&ray, movex, movez);
 //			pixel_put(img, x, y, create_trgb(0, colour.x, colour.y, colour.z));
 //		}

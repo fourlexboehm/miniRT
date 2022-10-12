@@ -18,5 +18,6 @@ double	sphere_collider(t_ray *r, t_sp	*s)
 	discriminant = (b * b) - (a * c);
 	if (discriminant < 0)
 		return (DBL_MAX);
+	//todo debug why negative
 	return ((-b - sqrt(discriminant)) / a);
 }

@@ -25,7 +25,7 @@ char	**get_file(char *path)
 	return (line);
 }
 
-void	set_vector3(t_vector3 *vec, char *line, int *j)
+void	set_vec(t_vec *vec, char *line, int *j)
 {
 	vec->x = ft_atof(&line[*j]);
 	while (line[(*j)++] != ',')

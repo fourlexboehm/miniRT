@@ -1,315 +1,315 @@
-#include <SDL.h>
-#include <stdio.h>
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 1000;
-const int SCREEN_HEIGHT = 1000;
-
-#define PI 3.141592654
-
-typedef struct s_vector3
-{
-	double	x;
-	double	y;
-	double	z;
-} t_vector3;
-
-typedef struct s_pl
-{
-	t_vector3 C;
-
-	double	ang;
-	int		size;
-} t_pl;
-
-typedef	struct s_sp
-{
-	t_vector3	pos;
-	double		diameter;
-}	t_sp;
-
-void draw_vector3(SDL_Renderer *renderer, t_vector3* v1)
-{
-	SDL_RenderDrawLine(renderer, 500, 500, v1->x + 500, v1->y + 500);
-}
-
-void inti_vector3(t_vector3* v1)
-{
-	v1->x = 0;
-	v1->y = 0;
-	v1->z = 0;
-}
-
-typedef struct s_ray
-{
-	t_vector3	O;
-	double		D;
-	int			size;
-} t_ray;
-
-double get_distance_vector3(t_vector3* v1, t_vector3* v2)
-{
-	return(sqrt(pow(v2->x - v1->x, 2)
-		+ pow(v2->y - v1->y, 2)
-		+ pow(v2->z + v1->z, 2)));
-}
-
-double get_coord_rad_vector3(t_vector3* v1, t_vector3* v2)
-{
-	return (acos((v1->x * v2->x + v1->y * v2->y + v1->z * v2->z)
-		/ (sqrt(pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2))
-			* sqrt(pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2)))));
-}
-
-double	get_angle_deg(t_vector3* v1, t_vector3* v2)
-{
-	return (atan((v1->y - v2->y + 0.000001) / (v1->x - v2->x + 0.000001)) * 180 / PI);
-}
-
-double	get_angle_rad(t_vector3* v1, t_vector3* v2)
-{
-	return (atan(v1->y - v2->y + 0.000001) / (v1->x - v2->x + 0.000001));
-}
-
-double get_coord_deg_vector3(t_vector3* v1, t_vector3* v2)
-{
-	return (get_coord_rad_vector3(v1, v2) * 180 / 3.141592);
-}
-
-void draw_circle(SDL_Renderer* r, t_sp* s)
-{
-	int	i;
-
-	i = 0;
-	while (++i < 1000)
-		SDL_RenderDrawPoint(r, s->pos.x + cos(i * 3.14 / 180) * s->diameter, s->pos.y + sin(i * 3.14 / 180) * s->diameter);
-}
-
-void	draw_ray(SDL_Renderer* r, t_ray* ray)
-{
-	//SDL_SetRenderDrawColor(r, 0, 255, 0, 255);
-	int	x = ray->O.x + cos(ray->D * 3.14 / 180) * ray->size;
-	int	y = ray->O.y + sin(ray->D * 3.14 / 180) * ray->size;
-	SDL_RenderDrawLine(r, ray->O.x, ray->O.y, x, y);
-}
-
-void	draw_plane(SDL_Renderer* r, t_pl* pl)
-{
-	int	x = pl->C.x + cos(pl->ang * 3.14 / 180) * pl->size;
-	int	y = pl->C.y + sin(pl->ang * 3.14 / 180) * pl->size;
-	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
-	x = pl->C.x + cos(pl->ang * 3.14 / 180) * -(pl->size);
-	y = pl->C.y + sin(pl->ang * 3.14 / 180) * -(pl->size);
-	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
-	x = pl->C.x + cos((pl->ang - 90) * 3.14 / 180) * 500;
-	y = pl->C.y + sin((pl->ang - 90) * 3.14 / 180) * 500;
-	SDL_SetRenderDrawColor(r, 150, 150, 150, 255);
-	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
-}
-
-int collide_sphere(t_ray *ray, t_sp *s, SDL_Renderer *r)
-{
-	double	A;
-	double	angle;
-	double	adj;
-
-	adj = get_distance_vector3(&ray->O, &s->pos);
-	angle = get_angle_deg(&ray->O, &s->pos) - ray->D;
-	A = tan(angle * PI / 180) * adj;
-	if (A < 0)
-		A *= -1;
-	if (A < s->diameter)
-	{
-		t_ray hit;
-		double	n;
-		double h = sqrt(pow(s->diameter, 2) - pow(A, 2));
-
-		hit.O.x = ray->O.x + cos(ray->D * 3.14 / 180) * (adj - h);
-		hit.O.y = ray->O.y + sin(ray->D * 3.14 / 180) * (adj - h);
-		//n = atan(fabs(hit.O.y - s->pos.y) / fabs(hit.O.x - s->pos.x)) * 180 / PI;
-		//hit.D = (atan(fabs(hit.O.y - s->pos.y) / fabs(hit.O.x - s->pos.x)) * 180 / PI) + 180;
-		
-		n = (atan((s->pos.y - hit.O.y + 0.000001) / (s->pos.x - hit.O.x + 0.000001)) * 180 / PI) + 180;
-		//n = abs(get_angle_deg(&s->pos, &hit.O));
-		if (hit.O.x > s->pos.x)
-			n += 180;
-		hit.D = n; // -get_angle_deg(&hit.O, &ray->O) + n * 2;
-		hit.size = 100;
-		// draw_ray(r, &hit);
-		if (ray->O.x < s->pos.x)
-			n -= 90;
-		hit.D = -get_angle_deg(&hit.O, &ray->O) + n * 2;
-		draw_ray(r, &hit);
-		return (1);
-	}
-	else
-		return (0);
-}
-
-// SDL_RenderDrawPoint(renderer, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500); // draw pixel
-
-double	plane_collider(t_ray* ray, t_pl* pl)
-{
-	double angle = -get_angle_deg(&pl->C, &ray->O) + pl->ang * 2;
-	return (angle);
-}
-
-int main(int argc, char* args[]) {
-	SDL_Event event;
-	SDL_Renderer* renderer;
-	SDL_Window* window;
-
-	SDL_Init(SDL_INIT_VIDEO);
-	SDL_CreateWindowAndRenderer(SCREEN_HEIGHT, SCREEN_WIDTH, 0, &window, &renderer);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
-	//for (i = 0; i < SCREEN_WIDTH; ++i)
-	//	SDL_RenderDrawPoint(renderer, (sin(i) * (i / 10)) + 500, cos(i) * (i / 10) + 500);
-
-	t_ray	ray;
-	ray.D = 45;
-	ray.O.x = 0;
-	ray.O.y = 0;
-	ray.O.z = 0;
-	ray.size = 707;
-
-	t_ray	ray2;
-	ray2.D = 135;
-	ray2.O.x = 1000;
-	ray2.O.y = 0;
-	ray2.O.z = 0;
-	ray2.size = 707;
-
-	t_ray	ray3;
-	ray3.D = 225;
-	ray3.O.x = 1000;
-	ray3.O.y = 1000;
-	ray3.O.z = 0;
-	ray3.size = 707;
-
-	t_ray	ray4;
-	ray4.D = 315;
-	ray4.O.x = 0;
-	ray4.O.y = 1000;
-	ray4.O.z = 0;
-	ray4.size = 707;
-
-	t_sp sp;
-	sp.pos.x = 500;
-	sp.pos.y = 500;
-	sp.pos.z = 0;
-	sp.diameter = 50;
-
-
-	/*
-	v2.x += 500;
-	v2.y += -100;
-	v2.z += 0;
-	printf_vector3(&v1);
-
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	draw_vector3(renderer, &v1);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-	draw_vector3(renderer, &v2);
-
-	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	SDL_RenderDrawLine(renderer, v1.x + 500, v1.y + 500, v2.x + 500 + (v1.x * (-1)), v2.y + 500 + -(v1.y * (-1)));
-	subtract_vector3(&v1, &v2);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-
-	draw_vector3(renderer, &v1);
-	printf_vector3(&v1);
-	*/
-
-	bool sign = true;
-	double mod = 0;
-
-	while (1) 
-	{
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
-
-		/*
-		dis = get_distance_vector3(&pl.C, &ray2.O);
-		printf("dis = %lf\n", dis);
-		opp = sqrt(pow(dis, 2) - pow(dis, 2));
-		printf("opp = %lf\n", opp);
-		ang = asin(opp / dis) * 3.14 / 180;
-		
-		new_ray2.D = pl.ang + ang;
-		*/
-
-		if (mod > 5)
-			sign = false;
-		else if (mod < -5)
-			sign = true;
-
-		double add = 0.02;
-		if (sign)
-		{
-			ray.D += add;
-			ray2.D += add;
-			ray3.D += add;
-			ray4.D += add;
-			mod += add;
-		}
-		else
-		{
-			ray.D -= add;
-			ray2.D -= add;
-			ray3.D -= add;
-			ray4.D -= add;
-			mod -= add;
-		}
-
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		draw_circle(renderer, &sp);
-
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		draw_ray(renderer, &ray);
-		collide_sphere(&ray, &sp, renderer);
-
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		draw_ray(renderer, &ray2);
-		collide_sphere(&ray2, &sp, renderer);
-
-		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-		draw_ray(renderer, &ray3);
-		collide_sphere(&ray3, &sp, renderer);
-
-		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-		draw_ray(renderer, &ray4);
-		collide_sphere(&ray4, &sp, renderer);
-		
-		/*
-		if (ray.D > 90)
-			ray.D = 0;
-		ray.D += 0.1 * si;
-		draw_circle(renderer, &s);
-		if (collide_sphere(&ray, &s, renderer))
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		else
-			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		draw_ray(renderer, &ray);
-		*/
-
-
-		/*
-		i = 0;
-		while (++i < 360)
-		{
-			j = tan(i ^ 2 * i ^ 4) - k * 5;
-			SDL_RenderDrawPoint(renderer, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500);
-			SDL_RenderDrawLine(renderer, 500, 500, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500);
-		}
-		*/
-		SDL_RenderPresent(renderer);
-		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
-			break;
-		SDL_Delay(10);
-	}
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-	return 0;
-}
+//#include <SDL.h>
+//#include <stdio.h>
+//
+////Screen dimension constants
+//const int SCREEN_WIDTH = 1000;
+//const int SCREEN_HEIGHT = 1000;
+//
+//#define PI 3.141592654
+//
+//typedef struct s_vector3
+//{
+//	double	x;
+//	double	y;
+//	double	z;
+//} t_vector3;
+//
+//typedef struct s_pl
+//{
+//	t_vector3 C;
+//
+//	double	ang;
+//	int		size;
+//} t_pl;
+//
+//typedef	struct s_sp
+//{
+//	t_vector3	pos;
+//	double		diameter;
+//}	t_sp;
+//
+//void draw_vector3(SDL_Renderer *renderer, t_vector3* v1)
+//{
+//	SDL_RenderDrawLine(renderer, 500, 500, v1->x + 500, v1->y + 500);
+//}
+//
+//void inti_vector3(t_vector3* v1)
+//{
+//	v1->x = 0;
+//	v1->y = 0;
+//	v1->z = 0;
+//}
+//
+//typedef struct s_ray
+//{
+//	t_vector3	O;
+//	double		D;
+//	int			size;
+//} t_ray;
+//
+//double get_distance_vector3(t_vector3* v1, t_vector3* v2)
+//{
+//	return(sqrt(pow(v2->x - v1->x, 2)
+//		+ pow(v2->y - v1->y, 2)
+//		+ pow(v2->z + v1->z, 2)));
+//}
+//
+//double get_coord_rad_vector3(t_vector3* v1, t_vector3* v2)
+//{
+//	return (acos((v1->x * v2->x + v1->y * v2->y + v1->z * v2->z)
+//		/ (sqrt(pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2))
+//			* sqrt(pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2)))));
+//}
+//
+//double	get_angle_deg(t_vector3* v1, t_vector3* v2)
+//{
+//	return (atan((v1->y - v2->y + 0.000001) / (v1->x - v2->x + 0.000001)) * 180 / PI);
+//}
+//
+//double	get_angle_rad(t_vector3* v1, t_vector3* v2)
+//{
+//	return (atan(v1->y - v2->y + 0.000001) / (v1->x - v2->x + 0.000001));
+//}
+//
+//double get_coord_deg_vector3(t_vector3* v1, t_vector3* v2)
+//{
+//	return (get_coord_rad_vector3(v1, v2) * 180 / 3.141592);
+//}
+//
+//void draw_circle(SDL_Renderer* r, t_sp* s)
+//{
+//	int	i;
+//
+//	i = 0;
+//	while (++i < 1000)
+//		SDL_RenderDrawPoint(r, s->pos.x + cos(i * 3.14 / 180) * s->diameter, s->pos.y + sin(i * 3.14 / 180) * s->diameter);
+//}
+//
+//void	draw_ray(SDL_Renderer* r, t_ray* ray)
+//{
+//	//SDL_SetRenderDrawColor(r, 0, 255, 0, 255);
+//	int	x = ray->O.x + cos(ray->D * 3.14 / 180) * ray->size;
+//	int	y = ray->O.y + sin(ray->D * 3.14 / 180) * ray->size;
+//	SDL_RenderDrawLine(r, ray->O.x, ray->O.y, x, y);
+//}
+//
+//void	draw_plane(SDL_Renderer* r, t_pl* pl)
+//{
+//	int	x = pl->C.x + cos(pl->ang * 3.14 / 180) * pl->size;
+//	int	y = pl->C.y + sin(pl->ang * 3.14 / 180) * pl->size;
+//	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
+//	x = pl->C.x + cos(pl->ang * 3.14 / 180) * -(pl->size);
+//	y = pl->C.y + sin(pl->ang * 3.14 / 180) * -(pl->size);
+//	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
+//	x = pl->C.x + cos((pl->ang - 90) * 3.14 / 180) * 500;
+//	y = pl->C.y + sin((pl->ang - 90) * 3.14 / 180) * 500;
+//	SDL_SetRenderDrawColor(r, 150, 150, 150, 255);
+//	SDL_RenderDrawLine(r, pl->C.x, pl->C.y, x, y);
+//}
+//
+//int collide_sphere(t_ray *ray, t_sp *s, SDL_Renderer *r)
+//{
+//	double	A;
+//	double	angle;
+//	double	adj;
+//
+//	adj = get_distance_vector3(&ray->O, &s->pos);
+//	angle = get_angle_deg(&ray->O, &s->pos) - ray->D;
+//	A = tan(angle * PI / 180) * adj;
+//	if (A < 0)
+//		A *= -1;
+//	if (A < s->diameter)
+//	{
+//		t_ray hit;
+//		double	n;
+//		double h = sqrt(pow(s->diameter, 2) - pow(A, 2));
+//
+//		hit.O.x = ray->O.x + cos(ray->D * 3.14 / 180) * (adj - h);
+//		hit.O.y = ray->O.y + sin(ray->D * 3.14 / 180) * (adj - h);
+//		//n = atan(fabs(hit.O.y - s->pos.y) / fabs(hit.O.x - s->pos.x)) * 180 / PI;
+//		//hit.D = (atan(fabs(hit.O.y - s->pos.y) / fabs(hit.O.x - s->pos.x)) * 180 / PI) + 180;
+//
+//		n = (atan((s->pos.y - hit.O.y + 0.000001) / (s->pos.x - hit.O.x + 0.000001)) * 180 / PI) + 180;
+//		//n = abs(get_angle_deg(&s->pos, &hit.O));
+//		if (hit.O.x > s->pos.x)
+//			n += 180;
+//		hit.D = n; // -get_angle_deg(&hit.O, &ray->O) + n * 2;
+//		hit.size = 100;
+//		// draw_ray(r, &hit);
+//		if (ray->O.x < s->pos.x)
+//			n -= 90;
+//		hit.D = -get_angle_deg(&hit.O, &ray->O) + n * 2;
+//		draw_ray(r, &hit);
+//		return (1);
+//	}
+//	else
+//		return (0);
+//}
+//
+//// SDL_RenderDrawPoint(renderer, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500); // draw pixel
+//
+//double	plane_collider(t_ray* ray, t_pl* pl)
+//{
+//	double angle = -get_angle_deg(&pl->C, &ray->O) + pl->ang * 2;
+//	return (angle);
+//}
+//
+//int main(int argc, char* args[]) {
+//	SDL_Event event;
+//	SDL_Renderer* renderer;
+//	SDL_Window* window;
+//
+//	SDL_Init(SDL_INIT_VIDEO);
+//	SDL_CreateWindowAndRenderer(SCREEN_HEIGHT, SCREEN_WIDTH, 0, &window, &renderer);
+//	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+//	SDL_RenderClear(renderer);
+//	//for (i = 0; i < SCREEN_WIDTH; ++i)
+//	//	SDL_RenderDrawPoint(renderer, (sin(i) * (i / 10)) + 500, cos(i) * (i / 10) + 500);
+//
+//	t_ray	ray;
+//	ray.D = 45;
+//	ray.O.x = 0;
+//	ray.O.y = 0;
+//	ray.O.z = 0;
+//	ray.size = 707;
+//
+//	t_ray	ray2;
+//	ray2.D = 135;
+//	ray2.O.x = 1000;
+//	ray2.O.y = 0;
+//	ray2.O.z = 0;
+//	ray2.size = 707;
+//
+//	t_ray	ray3;
+//	ray3.D = 225;
+//	ray3.O.x = 1000;
+//	ray3.O.y = 1000;
+//	ray3.O.z = 0;
+//	ray3.size = 707;
+//
+//	t_ray	ray4;
+//	ray4.D = 315;
+//	ray4.O.x = 0;
+//	ray4.O.y = 1000;
+//	ray4.O.z = 0;
+//	ray4.size = 707;
+//
+//	t_sp sp;
+//	sp.pos.x = 500;
+//	sp.pos.y = 500;
+//	sp.pos.z = 0;
+//	sp.diameter = 50;
+//
+//
+//	/*
+//	v2.x += 500;
+//	v2.y += -100;
+//	v2.z += 0;
+//	printf_vector3(&v1);
+//
+//	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//	draw_vector3(renderer, &v1);
+//	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+//	draw_vector3(renderer, &v2);
+//
+//	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+//	SDL_RenderDrawLine(renderer, v1.x + 500, v1.y + 500, v2.x + 500 + (v1.x * (-1)), v2.y + 500 + -(v1.y * (-1)));
+//	subtract_vector3(&v1, &v2);
+//	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+//
+//	draw_vector3(renderer, &v1);
+//	printf_vector3(&v1);
+//	*/
+//
+//	bool sign = true;
+//	double mod = 0;
+//
+//	while (1)
+//	{
+//		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+//		SDL_RenderClear(renderer);
+//
+//		/*
+//		dis = get_distance_vector3(&pl.C, &ray2.O);
+//		printf("dis = %lf\n", dis);
+//		opp = sqrt(pow(dis, 2) - pow(dis, 2));
+//		printf("opp = %lf\n", opp);
+//		ang = asin(opp / dis) * 3.14 / 180;
+//
+//		new_ray2.D = pl.ang + ang;
+//		*/
+//
+//		if (mod > 5)
+//			sign = false;
+//		else if (mod < -5)
+//			sign = true;
+//
+//		double add = 0.02;
+//		if (sign)
+//		{
+//			ray.D += add;
+//			ray2.D += add;
+//			ray3.D += add;
+//			ray4.D += add;
+//			mod += add;
+//		}
+//		else
+//		{
+//			ray.D -= add;
+//			ray2.D -= add;
+//			ray3.D -= add;
+//			ray4.D -= add;
+//			mod -= add;
+//		}
+//
+//		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+//		draw_circle(renderer, &sp);
+//
+//		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//		draw_ray(renderer, &ray);
+//		collide_sphere(&ray, &sp, renderer);
+//
+//		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+//		draw_ray(renderer, &ray2);
+//		collide_sphere(&ray2, &sp, renderer);
+//
+//		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+//		draw_ray(renderer, &ray3);
+//		collide_sphere(&ray3, &sp, renderer);
+//
+//		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+//		draw_ray(renderer, &ray4);
+//		collide_sphere(&ray4, &sp, renderer);
+//
+//		/*
+//		if (ray.D > 90)
+//			ray.D = 0;
+//		ray.D += 0.1 * si;
+//		draw_circle(renderer, &s);
+//		if (collide_sphere(&ray, &s, renderer))
+//			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//		else
+//			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+//		draw_ray(renderer, &ray);
+//		*/
+//
+//
+//		/*
+//		i = 0;
+//		while (++i < 360)
+//		{
+//			j = tan(i ^ 2 * i ^ 4) - k * 5;
+//			SDL_RenderDrawPoint(renderer, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500);
+//			SDL_RenderDrawLine(renderer, 500, 500, sin((j + k) * 2) * i + 500, cos((j - k) * 2) * i + 500);
+//		}
+//		*/
+//		SDL_RenderPresent(renderer);
+//		if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+//			break;
+//		SDL_Delay(10);
+//	}
+//	SDL_DestroyRenderer(renderer);
+//	SDL_DestroyWindow(window);
+//	SDL_Quit();
+//	return 0;
+//}

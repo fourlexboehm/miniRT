@@ -59,19 +59,9 @@ void	check_colliders(t_ray *r, t_scene *s, void *exempt)
 			}
 		}
 	}
-	/*
 	i = -1;
     while (++i < s->n_cylinders)
-    {
-        t = cylinder_collider(*r, s->cylinders[i]);
-        if (t < r->t)
-        {
-            r->t = t;
-            r->colour = s->cylinders[i].colour;
-        }
-    }
-*/
-
+		get_cylinder_t(r, s->cylinders[i]);
 	if ((t < s->last_t && t < DBL_MAX) || s->last_t == 0)
 	{
 		s->last_t = t;
@@ -117,7 +107,7 @@ void	light_rgba(t_rgba *colour, double scalar)
 
 /**
  * scales rgba with multiplication by the scalar
- */  
+ */
 void	scale_rgba(t_rgba *colour, double scalar)
 {
 	int	r;
@@ -133,8 +123,6 @@ void	scale_rgba(t_rgba *colour, double scalar)
 		colour->r = 0;
 	else
 		colour->r = r;
-	
-	
 	if (g > 255)
 		colour->g = 255;
 	else if (g < 0)
@@ -155,10 +143,9 @@ void	scale_rgba(t_rgba *colour, double scalar)
  */
 void	get_light(t_ray *r, t_scene *s)
 {
-	int	i;
+	int i;
 	t_ray light_ray;
-	double	light_dis;
-
+	double light_dis;
 	if (s->n_lights == 0)
 		light_rgba(&r->hit_colour, -255);
 	i = -1;
@@ -177,6 +164,7 @@ void	get_light(t_ray *r, t_scene *s)
 		}
 		else
 			light_rgba(&r->hit_colour, -255);
+		(void)light_dis;
 	}
 }
 
