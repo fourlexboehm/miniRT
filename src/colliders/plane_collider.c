@@ -1,13 +1,13 @@
 #include "../../includes/minirt.h"
 
-double	collide_plane(t_ray *r, t_pl *pl)
+double	plane_collider(t_ray *r, t_pl *pl)
 {
 	double	d;
 
-	d = dot(unit_vector3(r->D), pl->rot);
+	d = dot(unit_vec(r->dir), pl->dir);
 	if (fabs(d) > 0)
 	{
-		return (dot(subtract_vector3(pl->pos, r->O), pl->rot) / d);
+		return (dot(sub_vec(pl->pos, r->pos), pl->dir) / d);
 	}
 	return (DBL_MAX);
 }

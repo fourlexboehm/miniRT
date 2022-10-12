@@ -27,13 +27,13 @@ void	assign_more_camera(t_scene *scene, const char *line, int j)
 {
 	while (ft_isspace(line[j]))
 		j++;
-	scene->camera.rot.x = ft_atof(&line[j]);
+	scene->camera.dir.x = ft_atof(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->camera.rot.y = ft_atof(&line[j]);
+	scene->camera.dir.y = ft_atof(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->camera.rot.z = ft_atof(&line[j]);
+	scene->camera.dir.z = ft_atof(&line[j]);
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -112,9 +112,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("cam pos x = %f\n", camera->pos.x);
 //	printf("cam pos y = %f\n", camera->pos.y);
 //	printf("cam pos z = %f\n", camera->pos.z);
-//	printf("cam rot x = %f\n", camera->rot.x);
-//	printf("cam rot y = %f\n", camera->rot.y);
-//	printf("cam rot z = %f\n", camera->rot.z);
+//	printf("cam dir x = %f\n", camera->dir.x);
+//	printf("cam dir y = %f\n", camera->dir.y);
+//	printf("cam dir z = %f\n", camera->dir.z);
 //	printf("cam fov = %f\n", camera->fov);
 //	printf("\n");
 //}
@@ -136,9 +136,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("cylinder pos x = %f\n", cylinder->pos.x);
 //	printf("cylinder pos y = %f\n", cylinder->pos.y);
 //	printf("cylinder pos z = %f\n", cylinder->pos.z);
-//	printf("cylinder rot x = %f\n", cylinder->rot.x);
-//	printf("cylinder rot y = %f\n", cylinder->rot.y);
-//	printf("cylinder rot z = %f\n", cylinder->rot.z);
+//	printf("cylinder dir x = %f\n", cylinder->dir.x);
+//	printf("cylinder dir y = %f\n", cylinder->dir.y);
+//	printf("cylinder dir z = %f\n", cylinder->dir.z);
 //	printf("cylinder diameter = %f\n", cylinder->diameter);
 //	printf("cylinder height = %f\n", cylinder->height);
 //	printf("cylinder R = %u\n", cylinder->colour.r);
@@ -152,9 +152,9 @@ void	assign_scene(t_scene *scene, char **line)
 //	printf("plane pos x = %f\n", plane->pos.x);
 //	printf("plane pos y = %f\n", plane->pos.y);
 //	printf("plane pos z = %f\n", plane->pos.z);
-//	printf("plane rot x = %f\n", plane->rot.x);
-//	printf("plane rot y = %f\n", plane->rot.y);
-//	printf("plane rot z = %f\n", plane->rot.z);
+//	printf("plane dir x = %f\n", plane->dir.x);
+//	printf("plane dir y = %f\n", plane->dir.y);
+//	printf("plane dir z = %f\n", plane->dir.z);
 //	printf("plane R = %u\n", plane->colour.r);
 //	printf("plane G = %u\n", plane->colour.g);
 //	printf("plane B = %u\n", plane->colour.b);

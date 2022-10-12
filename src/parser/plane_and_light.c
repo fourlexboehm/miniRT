@@ -4,10 +4,10 @@ void	assign_more_plane(const t_scene *scene, const char *line, int j, int *i)
 {
 	while (line[j++] != ',')
 		;
-	scene->planes[*i].rot.y = ft_atof(&line[j]);
+	scene->planes[*i].dir.y = ft_atof(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->planes[*i].rot.z = ft_atof(&line[j]);
+	scene->planes[*i].dir.z = ft_atof(&line[j]);
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -42,7 +42,7 @@ void	assign_plane(t_scene *scene, char *line)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->planes[i].rot.x = ft_atof(&line[j]);
+	scene->planes[i].dir.x = ft_atof(&line[j]);
 	assign_more_plane(scene, line, j, &i);
 	ft_printf("...done\n");
 }

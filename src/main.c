@@ -4,7 +4,7 @@ int	main(int argc, char **argv)
 {
 	char		**line;
 	t_scene		scene;
-	t_vector3	**v_matrix;
+	t_vec		**v_matrix;
 	int			**c_matrix;
 
 	if (argc == 2)

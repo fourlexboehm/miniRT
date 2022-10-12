@@ -3,9 +3,9 @@
 /**
  * Normalize the vector to a unit vector
  */
-static t_vector3	vector_to_unit(t_vector3 v)
+static t_vec	vector_to_unit(t_vec v)
 {
-	t_vector3	unit;
+	t_vec	unit;
 	double		mag;
 
 	mag = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -26,29 +26,29 @@ static t_vector3	vector_to_unit(t_vector3 v)
  * coordinates for each axis of each corner
  * @param fov		in degrees
  */
-static t_corners	calculate_corners(t_vector3 unit_v, t_vector3 unit_q, \
-t_vector3 a, double fov)
+static t_corners	calculate_corners(t_vec unit_v, t_vec unit_q, \
+t_vec a, double fov)
 {
 	t_corners	corn;
 	double		ang_tan;
-	t_vector3	scaled_q;
-	t_vector3	scaled_v_x_tan;
+	t_vec	scaled_q;
+	t_vec	scaled_v_x_tan;
 
 	ang_tan = tanf((fov / 2.0) * M_PI / 180.0);
-	scaled_v_x_tan = scale_vector3(a, ang_tan * (9.0 / 16.0));
-	scaled_q = scale_vector3(unit_q, ang_tan);
-	corn.tl = unit_vector3(add_vector3(subtract_vector3(unit_v, scaled_q), scaled_v_x_tan));
-	corn.tr = unit_vector3(add_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan));
-	corn.bl = unit_vector3(subtract_vector3(subtract_vector3(unit_v, scaled_q),
+	scaled_v_x_tan = scale_vec(a, ang_tan * (9.0 / 16.0));
+	scaled_q = scale_vec(unit_q, ang_tan);
+	corn.tl = unit_vec(add_vec(sub_vec(unit_v, scaled_q), scaled_v_x_tan));
+	corn.tr = unit_vec(add_vec(add_vec(unit_v, scaled_q), scaled_v_x_tan));
+	corn.bl = unit_vec(sub_vec(sub_vec(unit_v, scaled_q),
 			scaled_v_x_tan));
-	corn.br = unit_vector3(subtract_vector3(add_vector3(unit_v, scaled_q), scaled_v_x_tan));
+	corn.br = unit_vec(sub_vec(add_vec(unit_v, scaled_q), scaled_v_x_tan));
 	return (corn);
 }
 
-static t_vector3	get_unit_q(t_vector3 unit_v)
+static t_vec	get_unit_q(t_vec unit_v)
 {
-	t_vector3	q;
-	t_vector3	unit_q;
+	t_vec	q;
+	t_vec	unit_q;
 	double		mag;
 
 	q.x = -unit_v.z;
@@ -69,14 +69,14 @@ static t_vector3	get_unit_q(t_vector3 unit_v)
 	return (unit_q);
 }
 
-t_vector3	**calculate_viewport_vectors(t_camera cam)
+t_vec	**calculate_viewport_vectors(t_camera cam)
 {
-	t_vector3	unit_v;
-	t_vector3	unit_q;
-	t_vector3	a;
+	t_vec	unit_v;
+	t_vec	unit_q;
+	t_vec	a;
 	t_corners	corners;
 
-	unit_v = vector_to_unit(cam.rot);
+	unit_v = vector_to_unit(cam.dir);
 	unit_q = get_unit_q(unit_v);
 	a.x = -unit_q.z * unit_v.y;
 	a.y = +unit_v.x * unit_q.z - unit_q.x * unit_v.z;

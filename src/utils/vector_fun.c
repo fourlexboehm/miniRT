@@ -7,9 +7,12 @@
  * @return
  */
 
-t_vector3	scale_vector3(const t_vector3 vec, const double scale)
+/**
+ * scales a vector with multiplication. returns result vector
+ */
+t_vec	scale_vec(const t_vec vec, const double scale)
 {
-	t_vector3	new_vec;
+	t_vec	new_vec;
 
 	new_vec.x = vec.x * scale;
 	new_vec.y = vec.y * scale;
@@ -17,9 +20,12 @@ t_vector3	scale_vector3(const t_vector3 vec, const double scale)
 	return (new_vec);
 }
 
-t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2)
+/**
+ * adds two vectors together. returns result vector
+ */
+t_vec	add_vec(const t_vec v1, const t_vec v2)
 {
-	t_vector3	ret;
+	t_vec	ret;
 
 	ret.x = v1.x + v2.x;
 	ret.y = v1.y + v2.y;
@@ -27,9 +33,12 @@ t_vector3	add_vector3(const t_vector3 v1, const t_vector3 v2)
 	return (ret);
 }
 
-t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2)
+/**
+ * subtracts the first vector with the second vector. returns result vector
+ */
+t_vec	sub_vec(const t_vec v1, const t_vec v2)
 {
-	t_vector3	ret;
+	t_vec	ret;
 
 	ret.x = v1.x - v2.x;
 	ret.y = v1.y - v2.y;
@@ -37,16 +46,12 @@ t_vector3	subtract_vector3(const t_vector3 v1, const t_vector3 v2)
 	return (ret);
 }
 
-void	multi_vector3(t_vector3 *v1, t_vector3 *v2)
+/**
+ * divides the vector with the scale. returns result vector
+ */
+t_vec	div_vec(const t_vec vec, const double scale)
 {
-	v1->x *= v2->x;
-	v1->y *= v2->y;
-	v1->y *= v2->z;
-}
-
-t_vector3	div_vector3(const t_vector3 vec, const double scale)
-{
-	t_vector3	new_vec;
+	t_vec	new_vec;
 
 	new_vec.x = vec.x / scale;
 	new_vec.y = vec.y / scale;
@@ -54,19 +59,28 @@ t_vector3	div_vector3(const t_vector3 vec, const double scale)
 	return (new_vec);
 }
 
-void	init_vec3(t_vector3 *v, double x, double y, double z)
+/**
+ * edits vectors values with x,y,z
+ */
+void	init_vec(t_vec *v, double x, double y, double z)
 {
 	v->x = x;
 	v->y = y;
 	v->z = z;
 }
 
-t_vector3	at(t_ray *ray, double t)
+/**
+ * returns vector pos at result of ray dir and pos scaled with t 
+ */
+t_vec	at(t_ray *ray, double t)
 {
-	return (add_vector3(ray->O, scale_vector3(ray->D, t)));
+	return (add_vec(ray->pos, scale_vec(ray->dir, t)));
 }
 
-t_vector3	unit_vector3(t_vector3 v1)
+/**
+ * returns a unitized vector
+ */
+t_vec	unit_vec(t_vec v1)
 {
 	double	mag;
 
@@ -77,39 +91,22 @@ t_vector3	unit_vector3(t_vector3 v1)
 	return (v1);
 }
 
-double dot(t_vector3 v1, t_vector3 v2)
+/**
+ * reutrns a new vector with x,y,z input values
+ */
+t_vec new_vec(double x, double y, double z)
 {
-	return ((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
-}
-
-double length_squared(t_vector3 const v3)
-{
-	return (v3.x * v3.x + v3.y * v3.y + v3.z * v3.z);
-}
-
-double length(t_vector3 const v3)
-{
-	return sqrt(length_squared(v3));
-}
-
-t_vector3 new_vector3(double x, double y, double z)
-{
-	t_vector3 rtn;
+	t_vec rtn;
 	rtn.x = x;
 	rtn.y = y;
 	rtn.z = z;
 	return (rtn);
 }
 
-// double get_distance_vector3(t_vector3 *v1, t_vector3 *v2)
-// {
-// 	return(sqrt(pow(v2->x - v1->x, 2)
-// 			  + pow(v2->y - v1->y, 2)
-// 			  + pow(v2->z - v1->z, 2)));
-// }
-//𝑑=√(𝑥2−𝑥1)2+(𝑦2−𝑦1)2+(𝑧2−𝑧1)2
-
-double get_distance_vector3(t_vector3 v1, t_vector3 v2)
+/**
+ * returns distance between two vectors
+ */
+double get_distance(t_vec v1, t_vec v2)
 {
 	return(sqrt((pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2) + pow(v2.z - v1.z, 2))));
 }

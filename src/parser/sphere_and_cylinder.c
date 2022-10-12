@@ -43,7 +43,7 @@ void	assign_sphere(t_scene *scene, char *line)
 
 static void	assign_more_cyl(t_scene *scene, const char *line, int j, int *i)
 {
-	scene->cylinders[*i].rot.z = ft_atof(&line[j]);
+	scene->cylinders[*i].dir.z = ft_atof(&line[j]);
 	while (!ft_isspace(line[j]))
 		j++;
 	while (ft_isspace(line[j]))
@@ -88,10 +88,10 @@ void	assign_cylinder(t_scene *scene, char *line)
 		j++;
 	while (ft_isspace(line[j]))
 		j++;
-	scene->cylinders[i].rot.x = ft_atof(&line[j]);
+	scene->cylinders[i].dir.x = ft_atof(&line[j]);
 	while (line[j++] != ',')
 		;
-	scene->cylinders[i].rot.y = ft_atof(&line[j]);
+	scene->cylinders[i].dir.y = ft_atof(&line[j]);
 	while (line[j++] != ',')
 		;
 	assign_more_cyl(scene, line, j, &i);

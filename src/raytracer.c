@@ -1,16 +1,26 @@
 #include "../includes/minirt.h"
 
-t_vector3	reflect(t_vector3 v, t_vector3 n)
+/**
+ * works out the reflect angle between a direction and a normal
+ */
+t_vec	reflect_angle(t_vec v, t_vec n)
 {
-	return (subtract_vector3(v, scale_vector3(n, 2 * dot(v, n))));
+	return (sub_vec(v, scale_vec(n, 2 * dot(v, n))));
 }
 
-double getAngle(t_vector3 a, t_vector3 b)
+/**
+ * gets the angle between two vectores in rad
+ **/
+double get_angle(t_vec a, t_vec b)
 {
 	return (acos( dot(a, b) / ((sqrt( a.x * a.x + a.y * a.y + a.z * a.z ) + 0.0000001) * ( sqrt( b.x * b.x + b.y * b.y + b.z * b.z ) + 0.0000001))));
 }
 
-void	check_collide(t_ray *r, t_scene *s, void *exempt)
+/**
+ * goes though every collider and configs ray
+ * with option to exempt an object
+ **/
+void	check_colliders(t_ray *r, t_scene *s, void *exempt)
 {
 	int		i;
 	double	t;
@@ -23,14 +33,14 @@ void	check_collide(t_ray *r, t_scene *s, void *exempt)
 		// 	printf("exempt =	%p\n sphere =	%p\n", exempt, &s->spheres[i]);
 		if (&s->spheres[i] != exempt)
 		{
-			t = collide_sphere(r, &s->spheres[i]);
+			t = sphere_collider(r, &s->spheres[i]);
 			if (t < r->t)
 			{
 				r->t = t;
 				r->colour = s->spheres[i].colour;
-				r->hitO = at(r, t);
-				r->hitD = unit_vector3(reflect(r->D, unit_vector3(subtract_vector3(r->O, s->spheres[i].pos))));
-				r->hitObject = &s->spheres[i];
+				r->hit_pos = at(r, t);
+				r->hit_dir = unit_vec(reflect_angle(r->dir, unit_vec(sub_vec(r->pos, s->spheres[i].pos))));
+				r->hit_object = &s->spheres[i];
 			}
 		}
 	}
@@ -39,27 +49,28 @@ void	check_collide(t_ray *r, t_scene *s, void *exempt)
 	{
 		if (&s->planes[i] != exempt)
 		{
-			t = collide_plane(r, &s->planes[i]);
+			t = plane_collider(r, &s->planes[i]);
 			if (t < r->t)
 			{
 				r->t = t;
-				r->hitO = at(r, t);
-				r->hitD = scale_vector3(unit_vector3(reflect(s->planes->rot, r->D)), 1);
+				r->hit_pos = at(r, t);
+				r->hit_dir = scale_vec(unit_vec(reflect_angle(s->planes->dir, r->dir)), 1);
 				r->colour = s->planes[i].colour;
 			}
 		}
 	}
+	/*
 	i = -1;
     while (++i < s->n_cylinders)
     {
-        t = collide_cylinder(*r, s->cylinders[i]);
+        t = cylinder_collider(*r, s->cylinders[i]);
         if (t < r->t)
         {
             r->t = t;
             r->colour = s->cylinders[i].colour;
         }
     }
-
+*/
 
 	if ((t < s->last_t && t < DBL_MAX) || s->last_t == 0)
 	{
@@ -68,7 +79,11 @@ void	check_collide(t_ray *r, t_scene *s, void *exempt)
 	}
 }
 
-void	light_color(t_rgba *colour, double scalar)
+/**
+ * adds scalar to rgba. clamps rgba values to 0 - 255 using int.
+ * used for lighting
+ */
+void	light_rgba(t_rgba *colour, double scalar)
 {
 	int	r;
 	int	g;
@@ -100,7 +115,10 @@ void	light_color(t_rgba *colour, double scalar)
 		colour->b = b;
 }
 
-void	scale_color(t_rgba *colour, double scalar)
+/**
+ * scales rgba with multiplication by the scalar
+ */  
+void	scale_rgba(t_rgba *colour, double scalar)
 {
 	int	r;
 	int	g;
@@ -132,6 +150,9 @@ void	scale_color(t_rgba *colour, double scalar)
 		colour->b = b;
 }
 
+/**
+ * gets light colour value including shadow
+ */
 void	get_light(t_ray *r, t_scene *s)
 {
 	int	i;
@@ -139,35 +160,30 @@ void	get_light(t_ray *r, t_scene *s)
 	double	light_dis;
 
 	if (s->n_lights == 0)
-	{
-		r->hitColour.r = 0;
-		r->hitColour.g = 0;
-		r->hitColour.b = 0;
-		return ;
-	}
+		light_rgba(&r->hit_colour, -255);
 	i = -1;
 	while (++i < s->n_lights)
 	{
-		light_ray.O = r->hitO;
-		light_ray.D = unit_vector3(subtract_vector3(r->hitO, s->lights[i].pos));
+		light_ray.pos = r->hit_pos;
+		light_ray.dir = unit_vec(sub_vec(r->hit_pos, s->lights[i].pos));
 
-		check_collide(&light_ray, s, r->hitObject);
-		light_dis = get_distance_vector3(s->lights[i].pos, light_ray.O);
-		// if (light_ray.t != DBL_MAX)
-		// 	printf("Light t		= %lf | light dis	= %lf\n",light_ray.t, light_dis);
-		if (light_ray.t > 0 )//>= light_dis - 10 )
+		check_colliders(&light_ray, s, r->hit_object);
+		light_dis = get_distance(s->lights[i].pos, light_ray.pos);
+		if (light_ray.t > 0 )
 		{
-			//double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
-			double angle = getAngle(s->lights[i].pos, r->hitO) - getAngle(r->hitD, r->hitO);
-			double result = ((angle * -180) - get_distance_vector3(s->lights[i].pos, r->hitO)) * ((s->lights[i].brightness * 1) + .5);
-			light_color(&r->hitColour, result * 1);
+			double angle = get_angle(s->lights[i].pos, r->hit_pos) - get_angle(r->hit_dir, r->hit_pos);
+			double result = ((angle * -180) - get_distance(s->lights[i].pos, r->hit_pos)) * (-(s->lights[i].brightness - 1) + .5);
+			light_rgba(&r->hit_colour, result * 1);
 		}
-		// else
-		// 	light_color(&r->hitColour, -255);
+		else
+			light_rgba(&r->hit_colour, -255);
 	}
 }
 
-t_rgba addColour(t_rgba ColourA, t_rgba ColourB)
+/**
+ * multiplys the two colours by .75 and then adds them together then clamps the values to 0-255
+ */
+t_rgba add_rgba(t_rgba Colour_A, t_rgba Colour_B)
 {
 	t_rgba new;
 	int	r;
@@ -178,9 +194,9 @@ t_rgba addColour(t_rgba ColourA, t_rgba ColourB)
 	// new.g = (ColourA.g * .5) + (ColourB.g * .5);
 	// new.b = (ColourA.b * .5) + (ColourB.b * .5);
 
-	r = (ColourA.r * .75) + (ColourB.r * .75);
-	g = (ColourA.g * .75) + (ColourB.g * .75);
-	b = (ColourA.b * .75) + (ColourB.b * .75);
+	r = (Colour_A.r * .75) + (Colour_B.r * .75);
+	g = (Colour_A.g * .75) + (Colour_B.g * .75);
+	b = (Colour_A.b * .75) + (Colour_B.b * .75);
 
 	if (r > 255)
 		r = 255;
@@ -195,22 +211,25 @@ t_rgba addColour(t_rgba ColourA, t_rgba ColourB)
 	return (new);
 }
 
+/**
+ * calculates the ray collider and configs the ray then calculates the lighting/colour
+ */
 void	ray_colour(t_ray *r, t_scene *s)
 {
-	r->hitObject = NULL;
-	check_collide(r, s, NULL);
-	r->hitColour = r->colour;
+	r->hit_object = NULL;
+	check_colliders(r, s, NULL);
+	r->hit_colour = r->colour;
 	if (r->t == DBL_MAX)
 	{
 		r->colour.r = 0;
 		r->colour.g = 0;
 		r->colour.b = 0;
-		scale_color(&r->colour, s->ambient_light.ambient);
+		scale_rgba(&r->colour, s->ambient_light.ambient);
 	}
 	else
 	{
-		scale_color(&r->colour, s->ambient_light.ambient);
+		scale_rgba(&r->colour, s->ambient_light.ambient);
 		get_light(r, s);
-		r->colour = addColour(r->colour, r->hitColour);
+		r->colour = add_rgba(r->colour, r->hit_colour);
 	}
 }

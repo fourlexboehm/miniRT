@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/10/05 12:29:15 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/12 13:12:13 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,31 @@ typedef struct s_image
 	int			endian;
 }					t_image;
 
-typedef struct s_vector3
+typedef struct s_vec
 {
 	double	x;
 	double	y;
 	double	z;
-}	t_vector3;
+}	t_vec;
 
 typedef struct s_ray
 {
-	t_vector3	O;
-	t_vector3	D;
+	t_vec	pos;
+	t_vec	dir;
 	t_rgba		colour;
 	double		t;
-	t_vector3	hitO;
-	t_vector3	hitD;
-	t_rgba		hitColour;
-	void		*hitObject;
+	t_vec	hit_pos;
+	t_vec	hit_dir;
+	t_rgba		hit_colour;
+	void		*hit_object;
 } t_ray;
 
 typedef struct s_corners
 {
-	t_vector3	tl;
-	t_vector3	tr;
-	t_vector3	bl;
-	t_vector3	br;
+	t_vec	tl;
+	t_vec	tr;
+	t_vec	bl;
+	t_vec	br;
 }	t_corners;
 
 // -------------------------- objs ------------------
@@ -79,29 +79,29 @@ typedef	struct s_ambient_light
 
 typedef	struct s_camera
 {
-	t_vector3	pos;
-	t_vector3	rot;
+	t_vec	pos;
+	t_vec	dir;
 	double		fov;
 }	t_camera;
 
 typedef	struct s_L
 {
-	t_vector3	pos;
+	t_vec	pos;
 	double		brightness;
 	t_rgba		colour;
 }	t_L;
 
 typedef	struct s_pl
 {
-	t_vector3	pos;
-	t_vector3	rot;
+	t_vec	pos;
+	t_vec	dir;
 	t_rgba		colour;
 }	t_pl;
 
 typedef	struct s_cy
 {
-	t_vector3	pos;
-	t_vector3	rot;
+	t_vec	pos;
+	t_vec	dir;
 	double		diameter;
 	double		height;
 	t_rgba		colour;
@@ -109,7 +109,7 @@ typedef	struct s_cy
 
 typedef	struct s_sp
 {
-	t_vector3	pos;
+	t_vec	pos;
 	double		diameter;
 	t_rgba		colour;
 }	t_sp;
@@ -142,9 +142,9 @@ typedef struct s_all
 }	t_all;
 
 //viewport
-t_vector3	**calculate_viewport_vectors(t_camera cam);
+t_vec	**calculate_viewport_vectors(t_camera cam);
 
-t_vector3	**set_cam_vectors(t_corners corn);
+t_vec	**set_cam_vectors(t_corners corn);
 
 //mlx
 void		render_image_on_mlx(int	**matrix_colours);
@@ -160,40 +160,39 @@ void		assign_cylinder(t_scene *scene, char *line);
 void		assign_sphere(t_scene *scene, char *line);
 void		get_n_obs(char **line, t_scene *scene);
 void		next_num(char *line, int *j);
-void		set_vector3(t_vector3 *vec, char *line, int *j);
+void		set_vec(t_vec *vec, char *line, int *j);
 char		**get_file(char *path);
 
 //	------------------------------ vector ------------------------
 
-t_vector3	scale_vector3(t_vector3 vec, double scale);
-t_vector3	add_vector3(t_vector3 v1, t_vector3 v2);
-t_vector3	subtract_vector3(t_vector3 v1, t_vector3 v2);
-void		multi_vector3(t_vector3 *v1, t_vector3 *v2);
-t_vector3	div_vector3(t_vector3 vec, double scale);
-void		init_vec3(t_vector3 *v, double x, double y, double z);
-t_vector3 	at(t_ray* ray, double t);
-t_vector3 	unit_vector3(t_vector3 v1);
-double		dot(t_vector3 v1, t_vector3 v2);
-double		length_squared(t_vector3 v3);
-double		length(t_vector3 v3);
-t_vector3	new_vector3(double x, double y, double z);
-double		get_distance_vector3(t_vector3 v1, t_vector3 v2);
-double 		get_coord_rad_vector3(t_vector3 v1, t_vector3 v2);
-double		get_coord_deg_vector3(t_vector3 *v1, t_vector3 *v2);
-t_vector3	reflect(t_vector3 v, t_vector3 n);
+t_vec		scale_vec(t_vec vec, double scale);
+t_vec		add_vec(t_vec v1, t_vec v2);
+t_vec		sub_vec(t_vec v1, t_vec v2);
+t_vec		reflect_angle(t_vec v, t_vec n);
+t_vec		div_vec(t_vec vec, double scale);
+t_vec 		at(t_ray* ray, double t);
+t_vec 		unit_vec(t_vec v1);
+t_vec		new_vec(double x, double y, double z);
+void		multi_vec(t_vec *v1, t_vec *v2);
+void		init_vec(t_vec *v, double x, double y, double z);
+double		dot(t_vec v1, t_vec v2);
+double		length_squared(t_vec v3);
+double		length(t_vec v3);
+double		get_distance(t_vec v1, t_vec v2);
+double 		get_coord_rad_vec(t_vec v1, t_vec v2);
+double		get_coord_deg_vec(t_vec *v1, t_vec *v2);
 
 //	------------------------------ colliders ------------------------
 
-double		collide_sphere(t_ray* r, t_sp* s);
-double		collide_plane(t_ray *r, t_pl *pl);
-double		collide_sphere(t_ray* r, t_sp* s);
-int			collide_cylinder(t_ray ray, t_cy cylinder);
+double		sphere_collider(t_ray* r, t_sp* s);
+double		plane_collider(t_ray *r, t_pl *pl);
+int			cylinder_collider(t_ray ray, t_cy cylinder);
 
 // -------------------------- ray ------------------------
 void	ray_colour(t_ray *r, t_scene *s);
 
 // -------------------------- colour------------------------
-int	**set_colour_matrix(t_vector3 **v_matrix, t_scene scene);
+int	**set_colour_matrix(t_vec **v_matrix, t_scene scene);
 
 #endif
 
