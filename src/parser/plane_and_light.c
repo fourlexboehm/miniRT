@@ -40,8 +40,6 @@ void	assign_plane(t_scene *scene, char *line)
 	scene->planes[i].pos.z = ft_atof(&line[j]);
 	while (!ft_isspace(line[j]))
 		j++;
-	while (ft_isspace(line[j]))
-		j++;
 	scene->planes[i].dir.x = ft_atof(&line[j]);
 	assign_more_plane(scene, line, j, &i);
 	ft_printf("...done\n");

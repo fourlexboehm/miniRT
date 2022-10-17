@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/10/12 13:12:13 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:05:15 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,9 @@ typedef struct s_all
 }	t_all;
 
 //viewport
-t_vec	**calculate_viewport_vectors(t_camera cam);
+t_vec		**calculate_viewport_vectors(t_camera cam);
 
-t_vec	**set_cam_vectors(t_corners corn);
+t_vec		**set_cam_vectors(t_corners corn);
 
 //mlx
 void		render_image_on_mlx(int	**matrix_colours);
@@ -185,17 +185,19 @@ double		get_coord_deg_vec(t_vec *v1, t_vec *v2);
 
 //	------------------------------ colliders ------------------------
 
-double		sphere_collider(t_ray* r, t_sp* s);
+double		sphere_collider(t_ray *r, t_sp *s);
 double		plane_collider(t_ray *r, t_pl *pl);
-int			cylinder_collider(t_ray ray, t_cy cylinder);
-//double 		get_cylinder_t(t_ray *ray, t_cy cylinder);
-double	get_cylinder_t(t_ray *ray, t_cy cylinder);
+double		get_cylinder_t(t_ray *ray, t_cy cylinder);
+void		check_colliders(t_ray *r, t_scene *s, void *exempt);
 
 // -------------------------- ray ------------------------
-void	ray_colour(t_ray *r, t_scene *s);
+void		ray_colour(t_ray *r, t_scene *s);
 
 // -------------------------- colour------------------------
-int	**set_colour_matrix(t_vec **v_matrix, t_scene scene);
+int			**set_colour_matrix(t_vec **v_matrix, t_scene scene);
+t_rgba		add_rgba(t_rgba Colour_A, t_rgba Colour_B);
+void		scale_rgba(t_rgba *colour, double scalar);
+void		light_rgba(t_rgba *colour, double scalar);
 
 #endif
 

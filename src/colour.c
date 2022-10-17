@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   colour.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 14:47:18 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:06:45 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minirt.h"
 //TODO add T as argument?
 
@@ -52,12 +64,63 @@ int	**set_colour_matrix(t_vec **v_matrix, t_scene scene)
 			c_matrix[x][y] = create_trgb(0, r.colour.r, r.colour.g, r.colour.b);
 		}
 	}
-	t_ray *temp = &scene.last_ray;
-	printf("last t was %lf\n", scene.last_t);
-	printf("at	x:%lf	y:%lf	z:%lf\nsphere	x:%lf	y:%lf	z:%lf\n", at(temp, scene.last_t).x, at(temp, scene.last_t).y, at(temp, scene.last_t).z, scene.spheres[0].pos.x, scene.spheres[0].pos.y, scene.spheres[0].pos.z);
-	printf("distance from cam to ball is %lf\n", get_distance(scene.spheres[0].pos, scene.last_ray.pos));
-	printf("distance from 0,0,0 to 0,250,0 is %lf\n", get_distance(new_vec(0,0,0), new_vec(0,250,0)));
-	printf("ray pos	x:%lf	y:%lf	z:%lf\n", temp->pos.x, temp->pos.y, temp->pos.z);
 	free2d_array((void **) v_matrix);
 	return (c_matrix);
+}
+
+/**
+ * multiplys the two colours by .75 and then adds them together then clamps the values to 0-255
+ */
+t_rgba	add_rgba(t_rgba Colour_A, t_rgba Colour_B)
+{
+	t_rgba	new;
+	int		r;
+	int		g;
+	int		b;
+
+	r = (Colour_A.r * .75) + (Colour_B.r * .75);
+	g = (Colour_A.g * .75) + (Colour_B.g * .75);
+	b = (Colour_A.b * .75) + (Colour_B.b * .75);
+	if (r > 255)
+		r = 255;
+	if (g > 255)
+		g = 255;
+	if (b > 255)
+		b = 255;
+	new.r = r;
+	new.g = g;
+	new.b = b;
+	return (new);
+}
+
+/**
+ * scales rgba with multiplication by the scalar
+ */
+void	scale_rgba(t_rgba *colour, double scalar)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = colour->r * scalar;
+	g = colour->g * scalar;
+	b = colour->b * scalar;
+	if (r > 255)
+		colour->r = 255;
+	else if (r < 0)
+		colour->r = 0;
+	else
+		colour->r = r;
+	if (g > 255)
+		colour->g = 255;
+	else if (g < 0)
+		colour->g = 0;
+	else
+		colour->g = g;
+	if (b > 255)
+		colour->b = 255;
+	else if (b < 0)
+		colour->b = 0;
+	else
+		colour->b = b;
 }
