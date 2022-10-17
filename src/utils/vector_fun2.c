@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:31:32 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:47:04 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:48:48 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ t_vec	new_vector3(double x, double y, double z)
 /**
  * returns distance between two vectors
  */
-double get_distance(t_vec v1, t_vec v2)
+double	get_distance(t_vec v1, t_vec v2)
 {
-	return(sqrt((pow(v2.x - v1.x, 2) + 
-		pow(v2.y - v1.y, 2) + pow(v2.z - v1.z, 2))));
+	return (sqrt((pow(v2.x - v1.x, 2)
+				+ pow(v2.y - v1.y, 2) + pow(v2.z - v1.z, 2))));
 }
