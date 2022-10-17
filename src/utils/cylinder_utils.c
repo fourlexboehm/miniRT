@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cylinder_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 15:33:50 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:33:57 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minirt.h"
 
 /**
- * https://www.w3adda.com/c-programs/c-program-to-solve-second-order-quadratic-equation
+ * https://www.w3adda.com/c-programs/c-
+ * program-to-solve-second-order-quadratic-equation
  */
 int	second_degree_equation(double a, double b, double c, double d[2])
 {

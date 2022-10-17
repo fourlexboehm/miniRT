@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere_collider.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 15:42:02 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:42:23 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 /**
@@ -6,10 +18,10 @@
 double	sphere_collider(t_ray *r, t_sp	*s)
 {
 	t_vec	oc;
-	double		a;
-	double		b;
-	double		c;
-	double		discriminant;
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
 
 	oc = sub_vec(r->pos, s->pos);
 	a = length_squared(r->dir);
@@ -18,6 +30,5 @@ double	sphere_collider(t_ray *r, t_sp	*s)
 	discriminant = (b * b) - (a * c);
 	if (discriminant < 0)
 		return (DBL_MAX);
-	//todo debug why negative
 	return ((-b - sqrt(discriminant)) / a);
 }

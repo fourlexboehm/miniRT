@@ -1,4 +1,16 @@
-#include "minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 15:33:35 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:33:42 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minirt.h"
 
 //todo make sure this works right
 void	get_sign(const char **str, int *neg)

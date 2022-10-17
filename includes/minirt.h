@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/10/17 15:05:15 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:22:15 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define MLX_TITLE "MiniRT"
-# define EPSILON 1e-4
-# define DEGREE_TO_RAD(x) (x * M_PI / 180)
 
 typedef struct s_rgba
 {
@@ -54,13 +52,13 @@ typedef struct s_ray
 {
 	t_vec	pos;
 	t_vec	dir;
-	t_rgba		colour;
-	double		t;
+	t_rgba	colour;
+	double	t;
 	t_vec	hit_pos;
 	t_vec	hit_dir;
-	t_rgba		hit_colour;
-	void		*hit_object;
-} t_ray;
+	t_rgba	hit_colour;
+	void	*hit_object;
+}	t_ray;
 
 typedef struct s_corners
 {
@@ -72,47 +70,47 @@ typedef struct s_corners
 
 // -------------------------- objs ------------------
 
-typedef	struct s_ambient_light
+typedef struct s_ambient_light
 {
-	double		ambient;
-	t_rgba		colour;
+	double	ambient;
+	t_rgba	colour;
 }	t_ambient_light;
 
-typedef	struct s_camera
+typedef struct s_camera
 {
 	t_vec	pos;
 	t_vec	dir;
-	double		fov;
+	double	fov;
 }	t_camera;
 
-typedef	struct s_L
+typedef struct s_L
 {
 	t_vec	pos;
-	double		brightness;
-	t_rgba		colour;
+	double	brightness;
+	t_rgba	colour;
 }	t_L;
 
-typedef	struct s_pl
+typedef struct s_pl
 {
 	t_vec	pos;
 	t_vec	dir;
-	t_rgba		colour;
+	t_rgba	colour;
 }	t_pl;
 
-typedef	struct s_cy
+typedef struct s_cy
 {
 	t_vec	pos;
 	t_vec	dir;
-	double		diameter;
-	double		height;
-	t_rgba		colour;
+	double	diameter;
+	double	height;
+	t_rgba	colour;
 }	t_cy;
 
-typedef	struct s_sp
+typedef struct s_sp
 {
 	t_vec	pos;
-	double		diameter;
-	t_rgba		colour;
+	double	diameter;
+	t_rgba	colour;
 }	t_sp;
 
 // -------------------------- end objs ------------------
@@ -122,16 +120,16 @@ typedef struct s_scene
 {
 	t_ambient_light	ambient_light;
 	t_camera		camera;
-	t_sp	*spheres;
-	t_cy	*cylinders;
-	t_pl	*planes;
-	t_L		*lights;
-	int		n_spheres;
-	int		n_cylinders;
-	int		n_planes;
-	int		n_lights;
-	double	last_t;
-	t_ray	last_ray;
+	t_sp			*spheres;
+	t_cy			*cylinders;
+	t_pl			*planes;
+	t_L				*lights;
+	int				n_spheres;
+	int				n_cylinders;
+	int				n_planes;
+	int				n_lights;
+	double			last_t;
+	t_ray			last_ray;
 }	t_scene;
 
 typedef struct s_all
@@ -171,8 +169,8 @@ t_vec		add_vec(t_vec v1, t_vec v2);
 t_vec		sub_vec(t_vec v1, t_vec v2);
 t_vec		reflect_angle(t_vec v, t_vec n);
 t_vec		div_vec(t_vec vec, double scale);
-t_vec 		at(t_ray* ray, double t);
-t_vec 		unit_vec(t_vec v1);
+t_vec		at(t_ray* ray, double t);
+t_vec		unit_vec(t_vec v1);
 t_vec		new_vec(double x, double y, double z);
 void		multi_vec(t_vec *v1, t_vec *v2);
 void		init_vec(t_vec *v, double x, double y, double z);
@@ -180,7 +178,7 @@ double		dot(t_vec v1, t_vec v2);
 double		length_squared(t_vec v3);
 double		length(t_vec v3);
 double		get_distance(t_vec v1, t_vec v2);
-double 		get_coord_rad_vec(t_vec v1, t_vec v2);
+double		get_coord_rad_vec(t_vec v1, t_vec v2);
 double		get_coord_deg_vec(t_vec *v1, t_vec *v2);
 
 //	------------------------------ colliders ------------------------

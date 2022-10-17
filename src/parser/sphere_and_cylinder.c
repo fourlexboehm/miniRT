@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere_and_cylinder.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 15:34:19 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:34:26 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minirt.h"
 
-void	assign_more_sphere(const t_scene *scene, const char *line, int j, int *i)
+void	assign_more_sphere(const t_scene *scene,
+		const char *line, int j, int *i)
 {
 	while (ft_isspace(line[j]))
 		j++;

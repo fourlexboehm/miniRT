@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:47:18 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:06:45 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:37:38 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	**set_colour_matrix(t_vec **v_matrix, t_scene scene)
 }
 
 /**
- * multiplys the two colours by .75 and then adds them together then clamps the values to 0-255
+ * multiplys the two colours by .75 and then adds 
+ * them together then clamps the values to 0-255
  */
 t_rgba	add_rgba(t_rgba Colour_A, t_rgba Colour_B)
 {

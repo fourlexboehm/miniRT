@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:37:48 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:08:10 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:38:46 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ t_vec	reflect_angle(t_vec v, t_vec n)
 /**
  * gets the angle between two vectores in rad
  **/
-double get_angle(t_vec a, t_vec b)
+double	get_angle(t_vec a, t_vec b)
 {
 	return (acos(dot(a, b) / ((sqrt(a.x * a.x + a.y * a.y + a.z * a.z)
-		+ 0.0000001) * (sqrt(b.x * b.x + b.y * b.y + b.z * b.z) + 0.0000001))));
+					+ 0.0000001) * (sqrt(b.x * b.x + b.y * b.y + b.z * b.z)
+					+ 0.0000001))));
 }
 
 /**
@@ -51,7 +52,7 @@ void	get_light(t_ray *r, t_scene *s)
 			angle = get_angle(s->lights[i].pos, r->hit_pos)
 				- get_angle(r->hit_dir, r->hit_pos);
 			result = ((angle * -180) - get_distance(s->lights[i].pos,
-				r->hit_pos)) * (-(s->lights[i].brightness - 1) + .5);
+						r->hit_pos)) * (-(s->lights[i].brightness - 1) + .5);
 			light_rgba(&r->hit_colour, result * 1);
 		}
 		else
@@ -60,7 +61,8 @@ void	get_light(t_ray *r, t_scene *s)
 }
 
 /**
- * calculates the ray collider and configs the ray then calculates the lighting/colour
+ * calculates the ray collider and configs 
+ * the ray then calculates the lighting/colour
  */
 void	ray_colour(t_ray *r, t_scene *s)
 {

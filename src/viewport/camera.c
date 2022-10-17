@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/17 15:31:12 by jgobbett          #+#    #+#             */
+/*   Updated: 2022/10/17 15:31:16 by jgobbett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minirt.h"
 
 /*
@@ -9,9 +21,9 @@
 */
 static void	set_cam_vertical_borders(t_vec **matrix)
 {
-	int			ctr;
-	int			max_x;
-	int			max_y;
+	int		ctr;
+	int		max_x;
+	int		max_y;
 	t_vec	diff_left;
 	t_vec	diff_right;
 
@@ -22,8 +34,10 @@ static void	set_cam_vertical_borders(t_vec **matrix)
 	diff_right = sub_vec(matrix[max_x][max_y], matrix[max_x][0]);
 	while (ctr < WIN_HEIGHT)
 	{
-		matrix[0][ctr] = add_vec(matrix[0][0], scale_vec(diff_left, (double)ctr / (double)(max_y)));
-		matrix[max_x][ctr] = add_vec(matrix[max_x][0], scale_vec(diff_right, (double)ctr / (double)(max_y)));
+		matrix[0][ctr] = add_vec(matrix[0][0], scale_vec(
+					diff_left, (double)ctr / (double)(max_y)));
+		matrix[max_x][ctr] = add_vec(matrix[max_x][0],
+				scale_vec(diff_right, (double)ctr / (double)(max_y)));
 		ctr++;
 	}
 }
@@ -34,9 +48,9 @@ static void	set_cam_vertical_borders(t_vec **matrix)
 */
 static void	set_cam_middle(t_vec **matrix)
 {
-	int			ctr_x;
-	int			ctr_y;
-	int			max_x;
+	int		ctr_x;
+	int		ctr_y;
+	int		max_x;
 	t_vec	diff;
 
 	ctr_y = 0;
@@ -61,7 +75,7 @@ static void	set_cam_middle(t_vec **matrix)
 t_vec	**set_cam_vectors(t_corners corn)
 {
 	t_vec	**matrix;
-	int			ctr;
+	int		ctr;
 
 	matrix = ft_calloc(sizeof(t_vec *), WIN_WIDTH + 1);
 	ctr = 0;
