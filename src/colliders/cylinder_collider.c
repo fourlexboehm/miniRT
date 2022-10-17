@@ -121,11 +121,9 @@ double	get_cylinder_t(t_ray *ray, t_cy cylinder)
 		direction = sub_vec(p_min_pprime, scale_vec(cylinder.dir, \
 		dot(p_min_pprime, cylinder.dir)));
 	}
-	else if (cylinder_lid(*ray, cylinder, &(coords), &rev_ori))
-		direction = unit_vec(scale_vec(cylinder.dir, rev_ori));
-
-	t = get_distance(ray->pos, cylinder.pos);
-	return (t);
+	else
+		direction = unit_vec(cylinder.dir);
+	return (dot(coords, direction));
 }
 //
 //double			solve_plane(t_vec o, t_vec d, t_vec plane_p, t_vec plane_nv)
