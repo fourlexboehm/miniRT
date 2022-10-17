@@ -61,11 +61,14 @@ void	check_colliders(t_ray *r, t_scene *s, void *exempt)
 	}
 	i = -1;
     while (++i < s->n_cylinders)
-		get_cylinder_t(r, s->cylinders[i]);
+		t = get_cylinder_t(r, s->cylinders[i]);
 	if ((t < s->last_t && t < DBL_MAX) || s->last_t == 0)
 	{
-		s->last_t = t;
-		s->last_ray = *r;
+		r->t = t;
+		r->colour = s->spheres[i].colour;
+		r->hit_pos = at(r, t);
+		r->hit_dir = unit_vec(reflect_angle(r->dir, unit_vec(sub_vec(r->pos, s->spheres[i].pos))));
+		r->hit_object = &s->spheres[i];;
 	}
 }
 

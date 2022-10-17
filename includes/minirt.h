@@ -24,6 +24,7 @@
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define MLX_TITLE "MiniRT"
+# define EPSILON 1e-4
 # define DEGREE_TO_RAD(x) (x * M_PI / 180)
 
 typedef struct s_rgba
@@ -187,7 +188,8 @@ double		get_coord_deg_vec(t_vec *v1, t_vec *v2);
 double		sphere_collider(t_ray* r, t_sp* s);
 double		plane_collider(t_ray *r, t_pl *pl);
 int			cylinder_collider(t_ray ray, t_cy cylinder);
-void		get_cylinder_t(t_ray *ray, t_cy cylinder);
+//double 		get_cylinder_t(t_ray *ray, t_cy cylinder);
+double	get_cylinder_t(t_ray *ray, t_cy cylinder);
 
 // -------------------------- ray ------------------------
 void	ray_colour(t_ray *r, t_scene *s);
