@@ -62,13 +62,13 @@ r:
 	clear
 	make
 	clear
-	@./$(NAME) scenes/one_sphere.rt
+	@./$(NAME) scenes/scene_1.rt
 
 rr:
 	clear
 	make re
 	clear
-	@./$(NAME) scenes/two_spheres.rt
+	@./$(NAME) scenes/scene_1.rt
 
 clean:
 	rm -rf $(OBJDIR)
