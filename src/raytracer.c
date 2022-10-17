@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:37:48 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:38:46 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/17 15:54:14 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_vec	reflect_angle(t_vec v, t_vec n)
 	return (sub_vec(v, scale_vec(n, 2 * dot(v, n))));
 }
 
-/**
+/**.
  * gets the angle between two vectores in rad
  **/
 double	get_angle(t_vec a, t_vec b)
