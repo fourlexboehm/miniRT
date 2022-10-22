@@ -12,15 +12,23 @@
 
 #include "../includes/minirt.h"
 
-int	main(int argc, char **argv)
+int	main(int argc, char **v)
 {
 	char		**line;
 	t_scene		scene;
 	t_vec		**v_matrix;
 	int			**c_matrix;
+	int			l;
 
+	l = 0;
 	if (argc == 2)
-		line = get_file(argv[1]);
+	{
+	l = strlen(v[1]);
+		if (l < 4 || v[1][l - 1] != 't' || v[1][l - 2] != 'r'
+				|| v[1][l - 3] != '.')
+			exit(printf("Error: Invalid file extension\n"));
+		line = get_file(v[1]);
+	}
 	else
 		line = get_file("scenes/subject_example3.rt");
 	assign_scene(&scene, line);
