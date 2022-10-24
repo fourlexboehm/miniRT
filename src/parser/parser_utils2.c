@@ -12,7 +12,6 @@ char	**get_file(char *path)
 		ft_printf("failed to read file\n");
 		exit(0);
 	}
-	ft_printf(".%d\n", fd);
 	line = malloc(1000);
 	i = -1;
 	while (1)

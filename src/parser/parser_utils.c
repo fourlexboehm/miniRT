@@ -21,6 +21,13 @@ int num_count(char *str)
 	return (j);
 }
 
+int	is_inchar(char c)
+{
+	if (c == '\n' || c == '-' || c == ' ' || c == '	' || c == '.' || c == ',' || (c >= '0' && c <= '9'))
+		return (1);
+	return (0);
+}
+
 int	check_line(char *str, int num)
 {
 	int	i;
@@ -30,14 +37,14 @@ int	check_line(char *str, int num)
 	{
 		if (!is_inchar(str[i]))
 		{
-			printf("failed char\n");
+			ft_printf("failed!!! found invalid char\n");
 			return (0);
 		}
 		i++;
 	}
 	if (num_count(str) != num)
 	{
-		printf("failed numcheck of expected = %d found = %d\n", num, num_count(str));
+		ft_printf("failed!!! numcheck of expected = %d found = %d\n", num, num_count(str));
 		return (0);
 	}
 	return (1);
@@ -46,8 +53,9 @@ int	check_line(char *str, int num)
 int get_vector(char *str, t_vec *vec)
 {
 	int i;
+
 	i = 0;
-	while (!ft_isspace(str[i]))
+	while (ft_isspace(str[i]))
 		i++;
 	vec->x = atof(&str[i]);
 	while (str[i] != ',' || ft_isspace(str[i]))
@@ -56,7 +64,7 @@ int get_vector(char *str, t_vec *vec)
 	while (str[i] != ',' || ft_isspace(str[i]))
 		i++;
 	vec->z = atof(&str[++i]);
-	while (!ft_isspace(str[i]))
+	while (!ft_isspace(str[i]) && str[i])
 		i++;
 	return (++i);
 }
@@ -69,13 +77,13 @@ int get_rgba(char *str, t_rgba *rgba)
 	int i;
 	i = 0;
 	r = atoi(&str[i]);
-	while (str[i] != ',' || ft_isspace(str[i]))
+	while ((str[i] != ',' || ft_isspace(str[i])) && str[i])
 		i++;
 	g = atoi(&str[++i]);
-	while (str[i] != ',' || ft_isspace(str[i]))
+	while ((str[i] != ',' || ft_isspace(str[i])) && str[i])
 		i++;
 	b = atoi(&str[++i]);
-	while (str[i] != ',' || ft_isspace(str[i]))
+	while ((str[i] != ',' || ft_isspace(str[i])) && str[i])
 		i++;
 	if (r > 255 || g > 255 || b > 255 ||
 		r < 0 || g < 0 || b < 0)

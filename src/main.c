@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:28:48 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:28:52 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/24 17:39:10 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	assign_scene(t_scene *scene, char **line)
 	malloc_objs(scene);
 	i = -1;
 	j = 1;
+	ft_printf("assigning objs...");
 	while (line[++i])
 	{
 		if (line[i][0] == 'A')
@@ -64,7 +65,7 @@ void	assign_scene(t_scene *scene, char **line)
 			j *= assign_light(scene, line[i] + 1);
 	}
 	if (j == 1)
-		printf("all objects assigned!\n");
+		ft_printf("done\n");
 	else
 		exit(printf("parser detected a miss config of an object\n"));
 }
@@ -83,7 +84,7 @@ int	main(int argc, char **v)
 	l = ft_strlen(v[1]);
 		if (l < 4 || v[1][l - 1] != 't' || v[1][l - 2] != 'r'
 				|| v[1][l - 3] != '.')
-			exit(printf("Error: Invalid file extension\n"));
+			exit(ft_printf("Error: Invalid file extension\n"));
 		line = get_file(v[1]);
 	}
 	else
