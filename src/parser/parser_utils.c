@@ -1,84 +1,99 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/17 15:35:21 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:35:23 by jgobbett         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minirt.h"
 
-char	**get_file(char *path)
-{
-	int		i;
-	int		fd;
-	char	**line;
 
-	ft_printf("opening scene..");
-	fd = open(path, O_RDONLY);
-	if (fd <= 0)
-	{
-		ft_printf("failed to read file\n");
-		exit(0);
-	}
-	ft_printf(".%d\n", fd);
-	line = malloc(1000);
-	i = -1;
-	while (1)
-	{
-		line[++i] = get_next_line(fd);
-		if (!line[i])
-			break ;
-	}
-	return (line);
-}
-
-void	set_vec(t_vec *vec, char *line, int *j)
-{
-	vec->x = ft_atof(&line[*j]);
-	while (line[(*j)++] != ',')
-		;
-	vec->y = ft_atof(&line[*j]);
-	while (line[(*j)++] != ',')
-		;
-	vec->z = ft_atof(&line[*j]);
-}
-
-void	next_num(char *line, int *j)
-{
-	while (!ft_isspace(line[*j]))
-		(*j)++;
-	while (ft_isspace(line[*j]))
-		(*j)++;
-}
-
-void	get_n_obs(char **line, t_scene *scene)
+int num_count(char *str)
 {
 	int	i;
-	int	num;
+	int	j;
 
-	num = 0;
-	(void)num;
-	i = -1;
-	ft_printf("getting num of objs");
-	scene->n_spheres = 0;
-	scene->n_planes = 0;
-	scene->n_cylinders = 0;
-	scene->n_lights = 0;
-	while (line[++i])
+	i = 0;
+	j = 0;
+	while (str[i])
 	{
-		if (line[i][0] == 's')
-			scene->n_spheres++;
-		if (line[i][0] == 'p')
-			scene->n_planes++;
-		if (line[i][0] == 'c')
-			scene->n_cylinders++;
-		if (line[i][0] == 'L')
-			scene->n_lights++;
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			j++;
+			while (str[i] == '.' || ((str[i] >= '0' && str[i] <= '9') && str[i + 1]))
+				i++;
+		}
+		i++;
 	}
-	ft_printf("...done\n");
+	return (j);
+}
+
+int	check_line(char *str, int num)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!is_inchar(str[i]))
+		{
+			printf("failed char\n");
+			return (0);
+		}
+		i++;
+	}
+	if (num_count(str) != num)
+	{
+		printf("failed numcheck of expected = %d found = %d\n", num, num_count(str));
+		return (0);
+	}
+	return (1);
+}
+
+int get_vector(char *str, t_vec *vec)
+{
+	int i;
+	i = 0;
+	while (!ft_isspace(str[i]))
+		i++;
+	vec->x = atof(&str[i]);
+	while (str[i] != ',' || ft_isspace(str[i]))
+		i++;
+	vec->y = atof(&str[++i]);
+	while (str[i] != ',' || ft_isspace(str[i]))
+		i++;
+	vec->z = atof(&str[++i]);
+	while (!ft_isspace(str[i]))
+		i++;
+	return (++i);
+}
+
+int get_rgba(char *str, t_rgba *rgba)
+{
+	int r;
+	int g;
+	int b;
+	int i;
+	i = 0;
+	r = atoi(&str[i]);
+	while (str[i] != ',' || ft_isspace(str[i]))
+		i++;
+	g = atoi(&str[++i]);
+	while (str[i] != ',' || ft_isspace(str[i]))
+		i++;
+	b = atoi(&str[++i]);
+	while (str[i] != ',' || ft_isspace(str[i]))
+		i++;
+	if (r > 255 || g > 255 || b > 255 ||
+		r < 0 || g < 0 || b < 0)
+		return (-1);
+	rgba->r = r;
+	rgba->g = g;
+	rgba->b = b;
+	return (i);
+}
+
+int get_double(char *str, double *d)
+{
+	int i;
+	i = 0;
+	while (ft_isspace(str[i]))
+		i++;
+	*d = atof(&str[i]);
+	while (!ft_isspace(str[i]))
+		i++;
+	return (i);
 }

@@ -9,7 +9,7 @@ OBJDIR	= ./obj/
 # src / obj files
 SRC		= main.c utils/utils.c render.c utils/vector_fun.c utils/vector_fun2.c utils/cylinder_utils.c \
  		viewport/viewport.c viewport/camera.c colour.c raytracer.c \
-		parser/parser.c parser/parser_utils.c parser/plane_and_light.c parser/sphere_and_cylinder.c\
+		parser/parser.c parser/parser_utils.c parser/parser_utils2.c \
 		colliders/plane_collider.c colliders/sphere_collider.c colliders/cylinder_collider.c \
 		colour2.c collider_fun.c
 
