@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/10/17 15:22:15 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/24 18:34:39 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,10 @@ typedef struct s_pl
 typedef struct s_cy
 {
 	t_vec	pos;
+	t_vec	pos2;
 	t_vec	dir;
 	double	diameter;
+	double	radius2;
 	double	height;
 	t_rgba	colour;
 }	t_cy;

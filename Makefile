@@ -62,13 +62,13 @@ r:
 	clear
 	make
 	clear
-	@./$(NAME) scenes/scene_1.rt
+	@./$(NAME) scenes/cylinder.rt
 
 rr:
 	clear
 	make re
 	clear
-	@./$(NAME) scenes/scene_1.rt
+	@./$(NAME) scenes/cylinder.rt
 
 clean:
 	rm -rf $(OBJDIR)
