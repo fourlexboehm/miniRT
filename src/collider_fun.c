@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:49:43 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/24 18:57:10 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/24 19:05:40 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	cylinder_check(t_ray *r, t_scene *s, void *exempt, double *t)
 		{
 			is_on_side = false;
 			*t = cylinder_intersection(*r, s->cylinders[i], &is_on_side);
-			if (*t != DBL_MAX && t > 0)
+			if (*t != DBL_MAX && t > 0 && *t < r->t)
 			{
 				r->t = *t;
 				r->hit_pos = scale_vec(r->dir, *t);

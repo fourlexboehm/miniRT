@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:35:36 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/24 18:40:25 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/24 19:01:39 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ double	cylinder_intersection(const t_ray ray, const t_cy cylinder, bool *is_on_s
 
 	cylinder_inter = cy_intersection(ray, cylinder);
 	caps_inter = caps_intersection(ray, cylinder);
-	if (cylinder_inter < INFINITY || caps_inter < INFINITY)
+	if (cylinder_inter < DBL_MAX || caps_inter < DBL_MAX)
 	{
 		if (cylinder_inter < caps_inter)
 		{
@@ -127,7 +127,7 @@ double	cylinder_intersection(const t_ray ray, const t_cy cylinder, bool *is_on_s
 		}
 		return (caps_inter);
 	}
-	return (INFINITY);
+	return (DBL_MAX);
 }
 
 t_vec get_closest_point_from_line(t_vec A, t_vec B, t_vec P)
