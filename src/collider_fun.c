@@ -58,37 +58,35 @@ void	plane_check(t_ray *r, t_scene *s, void *exempt, double *t)
 	}
 }
 
-t_vec get_closest_point_from_line(t_vec A, t_vec B, t_vec P);
-double	cylinder_intersection(const t_ray ray, const t_cy cylinder, bool *is_on_side);
+void	assign_ray(t_ray *r, t_cy *cy, double *t, bool ios)
+{
+	r->t = *t;
+	r->hit_pos = scale_vec(r->dir, *t);
+	if (ios)
+		r->hit_dir = sub_vec(get_closest_point_from_line(
+					cy->pos, cy->pos2,
+					r->hit_pos), r->hit_pos);
+	else
+		r->hit_dir = cy->dir;
+	r->hit_dir = unit_vec(r->hit_dir);
+	r->hit_object = cy;
+	r->colour = cy->colour;
+}
 
 void	cylinder_check(t_ray *r, t_scene *s, void *exempt, double *t)
 {
-	int	i;
-	bool		is_on_side;
+	int		i;
+	bool	is_on_side;
 
 	i = -1;
 	while (++i < s->n_cylinders)
 	{
-		s->cylinders[i].radius2 = s->cylinders[i].diameter * s->cylinders[i].diameter;
-		s->cylinders[i].pos2 = add_vec(s->cylinders[i].pos, scale_vec(s->cylinders[i].dir, s->cylinders[i].height));
 		if (&s->cylinders[i] != exempt)
 		{
 			is_on_side = false;
 			*t = cylinder_intersection(*r, s->cylinders[i], &is_on_side);
-			if (*t != DBL_MAX && t > 0 && *t < r->t)
-			{
-				r->t = *t;
-				r->hit_pos = scale_vec(r->dir, *t);
-				if (is_on_side)
-					r->hit_dir = sub_vec(get_closest_point_from_line(s->cylinders[i].pos, s->cylinders[i].pos2, r->hit_pos), r->hit_pos);
-				else
-					r->hit_dir = s->cylinders[i].dir;
-				r->hit_dir = unit_vec(r->hit_dir);
-				r->hit_object = &s->cylinders[i];
-				r->colour = s->cylinders[i].colour;
-				// printf("r:%i g:%i b:%i\n", s->cylinders[i].colour.r, s->cylinders[i].colour.g, s->cylinders[i].colour.b);
-				// printf("t = %lf\n", *t);
-			}
+			if (*t != DBL_MAX && *t > 0 && *t < r->t)
+				assign_ray(r, &s->cylinders[i], t, is_on_side);
 		}
 	}
 }

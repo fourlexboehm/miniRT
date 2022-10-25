@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../includes/minirt.h"
 
 /**
  * returns t (distance) if it and returns BDL_MAX if nothing hit

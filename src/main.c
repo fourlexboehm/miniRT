@@ -14,11 +14,11 @@
 
 static int	assign_light(t_scene *scene, char *line)
 {
-	int i;
-	static int j = 0;
+	int			i;
+	static int	j = 0;
 
 	if (!check_line(line + 1, 7))
-		return(0);
+		return (0);
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
@@ -48,7 +48,6 @@ void	assign_scene(t_scene *scene, char **line)
 	malloc_objs(scene);
 	i = -1;
 	j = 1;
-	ft_printf("assigning objs...");
 	while (line[++i])
 	{
 		if (line[i][0] == 'A')
@@ -64,9 +63,7 @@ void	assign_scene(t_scene *scene, char **line)
 		else if (line[i][0] == 'L')
 			j *= assign_light(scene, line[i] + 1);
 	}
-	if (j == 1)
-		ft_printf("done\n");
-	else
+	if (j == 0)
 		exit(printf("parser detected a miss config of an object\n"));
 }
 

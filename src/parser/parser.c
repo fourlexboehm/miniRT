@@ -2,26 +2,26 @@
 
 int	assign_ambient_light(t_scene *scene, char *line)
 {
-    int i;
+	int	i;
 
 	if (!check_line(line, 4))
-		return(0);
-    i = 1;
-    while (ft_isspace(line[i]))
+		return (0);
+	i = 1;
+	while (ft_isspace(line[i]))
 		i++;
-    i += get_double(&line[i], &scene->ambient_light.ambient);
-    while (ft_isspace(line[i]))
+	i += get_double(&line[i], &scene->ambient_light.ambient);
+	while (ft_isspace(line[i]))
 		i++;
-    get_rgba(&line[i], &scene->ambient_light.colour);
+	get_rgba(&line[i], &scene->ambient_light.colour);
 	return (1);
 }
 
 int	assign_camera(t_scene *scene, char *line)
 {
-	int i;
+	int	i;
 
 	if (!check_line(line, 7))
-		return(0);
+		return (0);
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
@@ -35,11 +35,11 @@ int	assign_camera(t_scene *scene, char *line)
 
 int	assign_cylinder(t_scene *scene, char *line)
 {
-	int i;
-	static int j = 0;
+	int			i;
+	static int	j = 0;
 
 	if (!check_line(line, 11))
-		return(0);
+		return (0);
 	i = 1;
 	while (ft_isspace(line[i]))
 		i++;
@@ -54,11 +54,11 @@ int	assign_cylinder(t_scene *scene, char *line)
 
 int	assign_sphere(t_scene *scene, char *line)
 {
-	int	i;
+	int			i;
 	static int	j = 0;
-	
+
 	if (!check_line(line, 7))
-		return(0);
+		return (0);
 	i = 1;
 	while (ft_isspace(line[i]))
 		i++;
@@ -75,30 +75,13 @@ int	assign_plane(t_scene *scene, char *line)
 	static int	j = 0;
 
 	if (!check_line(line, 9))
-		return(0);
+		return (0);
 	i = 1;
 	while (ft_isspace(line[i]))
 		i++;
 	i += get_vector(&line[i], &scene->planes[j].pos) - 1;
 	i += get_vector(&line[i], &scene->planes[j].dir);
 	i += get_rgba(&line[i], &scene->planes[j].colour);
-	j++;
-	return (1);
-}
-
-int	assign_light(t_scene *scene, char *line)
-{
-	int i;
-	static int j = 0;
-
-	if (!check_line(line, 7))
-		return(0);
-	i = 0;
-	while (ft_isspace(line[i]))
-		i++;
-	i += get_vector(&line[i], &scene->lights[j].pos);
-	i += get_double(&line[i], &scene->lights[j].brightness);
-	i += get_rgba(&line[i], &scene->lights[j].colour);
 	j++;
 	return (1);
 }
