@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 14:40:55 by aboehm            #+#    #+#             */
-/*   Updated: 2022/10/24 18:34:39 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/26 13:01:53 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,8 @@ void		ray_colour(t_ray *r, t_scene *s);
 int			**set_colour_matrix(t_vec **v_matrix, t_scene scene);
 t_rgba		add_rgba(t_rgba Colour_A, t_rgba Colour_B);
 void		scale_rgba(t_rgba *colour, double scalar);
-void		light_rgba(t_rgba *colour, double scalar);
+t_rgba		light_rgba(t_rgba colour, double scalar);
+t_rgba		color_mixer(t_rgba c1, t_rgba c2);
 
 #endif
 

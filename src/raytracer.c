@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:37:48 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:54:14 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/26 12:46:11 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ void	get_light(t_ray *r, t_scene *s)
 				- get_angle(r->hit_dir, r->hit_pos);
 			result = ((angle * -180) - get_distance(s->lights[i].pos,
 						r->hit_pos)) * (-(s->lights[i].brightness - 1) + .5);
-			light_rgba(&r->hit_colour, result * 1);
+			r->hit_colour = light_rgba(color_mixer(r->hit_colour,
+						s->lights[i].colour), result * 1);
 		}
 		else
-			light_rgba(&r->hit_colour, -255);
+			r->hit_colour = light_rgba(r->hit_colour, -255);
 	}
 }
 

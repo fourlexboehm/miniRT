@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 14:47:18 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/17 15:37:38 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/26 12:21:16 by jgobbett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ t_rgba	add_rgba(t_rgba Colour_A, t_rgba Colour_B)
 	int		g;
 	int		b;
 
-	r = (Colour_A.r * .75) + (Colour_B.r * .75);
-	g = (Colour_A.g * .75) + (Colour_B.g * .75);
-	b = (Colour_A.b * .75) + (Colour_B.b * .75);
+	r = (Colour_A.r * .5) + (Colour_B.r * .5);
+	g = (Colour_A.g * .5) + (Colour_B.g * .5);
+	b = (Colour_A.b * .5) + (Colour_B.b * .5);
 	if (r > 255)
 		r = 255;
 	if (g > 255)
