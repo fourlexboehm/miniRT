@@ -12,6 +12,14 @@
 
 #include "../includes/minirt.h"
 
+double	min(double a, double b)
+{
+	if (a < b)
+		return (a);
+	else
+		return (b);
+}
+
 static int	assign_light(t_scene *scene, char *line)
 {
 	int			i;

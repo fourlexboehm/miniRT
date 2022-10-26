@@ -6,7 +6,7 @@
 /*   By: jgobbett <jgobbett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:35:36 by jgobbett          #+#    #+#             */
-/*   Updated: 2022/10/24 19:01:39 by jgobbett         ###   ########.fr       */
+/*   Updated: 2022/10/26 11:16:04 by aboehm           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static double	caps_intersection(t_ray ray, const t_cy cylinder)
 		if ((id1 < INFINITY && get_distance(ip1, cylinder.pos)
 				<= cylinder.radius2) && (id2 < INFINITY
 				&& get_distance(ip2, c2) <= cylinder.radius2))
-			return (id1 < id2 ? id1 : id2);
+			return (min(id1, id2));
 		else if (id1 < INFINITY && get_distance(
 				ip1, cylinder.pos) <= cylinder.radius2)
 			return (id1);

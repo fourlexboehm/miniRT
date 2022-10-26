@@ -201,6 +201,8 @@ void		check_colliders(t_ray *r, t_scene *s, void *exempt);
 t_vec		get_closest_point_from_line(t_vec A, t_vec B, t_vec P);
 double		cylinder_intersection(const t_ray ray,
 				const t_cy cylinder, bool *is_on_side);
+double		min(double a, double b);
+
 
 // -------------------------- ray ------------------------
 void		ray_colour(t_ray *r, t_scene *s);
